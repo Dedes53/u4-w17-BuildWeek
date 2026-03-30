@@ -5,6 +5,9 @@
     <persistence-unit name="team7">
         <!-- AGGIUNGERE SEMPRE LA CLASSE -->
         <class>team7.entities....</class>
+        <class>team7.entities.Mezzo</class>
+        <class>team7.entities.PeriodoStatoMezzo</class>
+        <class>team7.entities.Utente</class>
 
         <properties>
             <!-- riferimenti al database -->
