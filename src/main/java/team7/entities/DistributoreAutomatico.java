@@ -9,6 +9,9 @@ public class DistributoreAutomatico extends Rivenditore {
 
 
     //   costruttore
+    protected DistributoreAutomatico() {
+    }
+
     public DistributoreAutomatico(UUID rivenditoreId, String nomeAttivita, boolean attivo) {
         super(rivenditoreId, nomeAttivita);
         this.attivo = attivo;

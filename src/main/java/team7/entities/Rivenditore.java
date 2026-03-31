@@ -6,6 +6,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "rivenditori")
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Rivenditore {
 
     //  attibuti
@@ -13,13 +14,18 @@ public abstract class Rivenditore {
     @GeneratedValue
     @Column(name = "id")
     private UUID rivenditoreId;
+
     @Column(name = "nome_attivita")
     private String nomeAttivita;
 
+    @Column(name = "contatore_titoli", nullable = false)
+    private long contatoreTitoli;
 
     //  costruttori
-    public Rivenditore(UUID rivenditore_id, String nome_attivita) {
-        this.rivenditoreId = rivenditore_id;
+    protected Rivenditore() {
+    }
+
+    public Rivenditore(String nome_attivita) {
         this.nomeAttivita = nome_attivita;
     }
 
@@ -44,4 +50,12 @@ public abstract class Rivenditore {
                 ", nome_attivita='" + nomeAttivita + '\'' +
                 '}';
     }
+
+    //   genera il codice univoco per il titolo di viaggio che emette
+    public String generaCodiceUnivoco() {
+        this.contatoreTitoli++;
+        String uuidCorto = this.rivenditoreId.toString().substring(0, 8);
+        return String.format("RIV-%s-%05d", uuidCorto, this.contatoreTitoli);
+    }
+    
 }

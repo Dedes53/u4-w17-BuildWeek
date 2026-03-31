@@ -14,10 +14,22 @@ public abstract class TitoloViaggio {
     private UUID id;
 
     @Column(unique = true)
-    private String codice;
+    private String codiceUnivoco;
 
     private LocalDate dataEmissione;
 
     @ManyToOne
+    @JoinColumn(name = "rivenditore_id")
     private Rivenditore rivenditore;
+
+
+    protected TitoloViaggio() {
+    }
+
+    public void setRivenditore(Rivenditore r) {
+        this.rivenditore = r;
+        this.dataEmissione = LocalDate.now();
+        this.codiceUnivoco = r.generaCodiceUnivoco();
+    }
+
 }
