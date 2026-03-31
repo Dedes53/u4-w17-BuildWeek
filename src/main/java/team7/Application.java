@@ -2,14 +2,8 @@ package team7;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import team7.dao.MezzoDAO;
-import team7.dao.PercorrenzaDAO;
-import team7.dao.PeriodoStatoMezzoDAO;
-import team7.dao.TrattaDAO;
-import team7.entities.Mezzo;
-import team7.entities.Percorrenza;
-import team7.entities.PeriodoStatoMezzo;
-import team7.entities.Tratta;
+import team7.dao.*;
+import team7.entities.*;
 import team7.enumm.StatoMezzo;
 import team7.enumm.TipoMezzo;
 
@@ -215,15 +209,10 @@ public class Application {
                     mezzoDAO.save(mezzoPercorrenza);
 
                     // - registra una percorrenza di un mezzo su una tratta
-                    LocalDateTime partenza = LocalDateTime.now();
-                    LocalDateTime arrivo = partenza.plusMinutes(42);
+                    LocalDateTime datapartenza = LocalDateTime.now();
+                    LocalDateTime dataarrivo = datapartenza.plusMinutes(42);
 
-                    Percorrenza percorrenzaTest = new Percorrenza(
-                            mezzoPercorrenza,
-                            trattaPercorrenza,
-                            partenza,
-                            arrivo
-                    );
+                    Percorrenza percorrenzaTest = new Percorrenza(mezzoPercorrenza, trattaPercorrenza, datapartenza, dataarrivo);
 
                     percorrenzaDAO.salvapERCORRENZA(percorrenzaTest);
                     System.out.println("Percorrenza salvata:");
@@ -263,6 +252,182 @@ public class Application {
                     System.out.println("Percorrenze della tratta:");
                     percorrenzaDAO.TrovaTratta(trattaPercorrenza.getId().toString()).forEach(System.out::println);
 
+                    break;
+                case 10:
+                    System.out.println("Inserimento manuale");
+                    try {
+                        int sceltaInserimento;
+                        do {
+                            System.out.println("=== MENU INSERIMENTO ===");
+                            System.out.println("1 - Salva mezzo");
+                            System.out.println("2 - Salva tratta");
+                            System.out.println("3 - Salva percorrenza");
+                            System.out.println("4 - Salva rivenditore");
+                            System.out.println("0 - Torna indietro");
+
+                            sceltaInserimento = scanner.nextInt();
+
+                            switch (sceltaInserimento) {
+                                case 1:
+                                    System.out.println("Inserisci codice del mezzo:");
+                                    String codice = scanner.nextLine();
+
+                                    System.out.println("Inserisci 1 se il mezzo è un Tram o 2 se è un Bus:");
+                                    int sceltaTipo = scanner.nextInt();
+                                    scanner.nextLine();
+
+                                    TipoMezzo tipo;
+                                    if(sceltaTipo <1 || sceltaTipo> 2){
+                                        System.out.println("numero digitatato errato...ripetere operazione");
+                                        break;
+                                    }
+                                    if (sceltaTipo == 1) {
+                                        tipo = TipoMezzo.TRAM;
+                                    } else {
+                                        tipo = TipoMezzo.BUS;
+                                    }
+
+                                    System.out.println("Inserisci capienza del mezzo:");
+                                    int capienza = scanner.nextInt();
+                                    scanner.nextLine();
+
+                                    Mezzo mezzoNuovo = new Mezzo(codice, tipo, StatoMezzo.IN_SERVIZIO, capienza);
+
+                                    mezzoDAO.save(mezzoNuovo);
+
+                                    System.out.println("Mezzo salvato:");
+                                    System.out.println(mezzoNuovo);
+                                case 2:
+                                    // chiedi dati tratta
+                                    System.out.println("Inserisci zona di partenza:");
+                                    String partenza = scanner.nextLine();
+
+                                    System.out.println("Inserisci zona di arrivo:");
+                                    String arrivo = scanner.nextLine();
+
+                                    System.out.println("Inserisci durata in minuti:");
+                                    int minuti = scanner.nextInt();
+
+                                    Tratta nuovaTratta = new Tratta(partenza, arrivo, minuti);
+
+                                    trattaDAO.salvaTratta(nuovaTratta);
+
+                                    System.out.println("Tratta salvata:");
+                                    System.out.println(nuovaTratta);
+                                    break;
+                                case 3:
+                                    // chiedi dati percorrenza
+                                    try {
+                                        System.out.println("Inserisci id del mezzo:");
+                                        String idMezzo = scanner.nextLine();
+
+                                        System.out.println("Inserisci id della tratta:");
+                                        String idTratta = scanner.nextLine();
+
+                                        Mezzo mezzo = mezzoDAO.findById(idMezzo);
+                                        Tratta tratta = trattaDAO.trovaPerID(idTratta);
+
+                                        System.out.println("Inserisci anno partenza:");
+                                        int annoPartenza = scanner.nextInt();
+
+                                        System.out.println("Inserisci mese partenza:");
+                                        int mesePartenza = scanner.nextInt();
+
+                                        System.out.println("Inserisci giorno partenza:");
+                                        int giornoPartenza = scanner.nextInt();
+
+                                        System.out.println("Inserisci ora partenza:");
+                                        int oraPartenza = scanner.nextInt();
+
+                                        System.out.println("Inserisci minuti partenza:");
+                                        int minutiPartenza = scanner.nextInt();
+
+                                        System.out.println("Inserisci anno arrivo:");
+                                        int annoArrivo = scanner.nextInt();
+
+                                        System.out.println("Inserisci mese arrivo:");
+                                        int meseArrivo = scanner.nextInt();
+
+                                        System.out.println("Inserisci giorno arrivo:");
+                                        int giornoArrivo = scanner.nextInt();
+
+                                        System.out.println("Inserisci ora arrivo:");
+                                        int oraArrivo = scanner.nextInt();
+
+                                        System.out.println("Inserisci minuti arrivo:");
+                                        int minutiArrivo = scanner.nextInt();
+                                        scanner.nextLine();
+
+                                        LocalDateTime partenzap = LocalDateTime.of(
+                                                annoPartenza, mesePartenza, giornoPartenza, oraPartenza, minutiPartenza
+                                        );
+
+                                        LocalDateTime arrivop = LocalDateTime.of(
+                                                annoArrivo, meseArrivo, giornoArrivo, oraArrivo, minutiArrivo
+                                        );
+
+                                        Percorrenza percorrenzaNuova = new Percorrenza(mezzo, tratta, partenzap, arrivop);
+
+                                        percorrenzaDAO.salvapERCORRENZA(percorrenzaNuova);
+
+                                        System.out.println("Percorrenza salvata:");
+                                        System.out.println(percorrenzaNuova);
+
+                                    } catch (Exception e) {
+                                        System.out.println("Errore inserimento percorrenza: " + e.getMessage());
+                                    }
+                                    break;
+                                case 4:
+                                    try {
+                                        System.out.println("Inserisci 1 per Rivenditore Autorizzato o 2 per Distributore Automatico:");
+                                        int sceltaRiv = scanner.nextInt();
+                                        scanner.nextLine();
+
+                                        System.out.println("Inserisci nome attività:");
+                                        String nome = scanner.nextLine();
+
+                                        if (sceltaRiv == 1) {
+                                            // Rivenditore autorizzato
+                                            RivenditoreAutorizzato riv = new RivenditoreAutorizzato(nome);
+
+                                            RivenditoreDAO.save(riv);
+
+                                            System.out.println("Rivenditore autorizzato salvato:");
+                                            System.out.println(riv);
+
+                                        } else if (sceltaRiv == 2) {
+                                            // Distributore automatico
+                                            System.out.println("Inserisci 1 se attivo, 2 se fuori servizio:");
+                                            int stato = scanner.nextInt();
+                                            scanner.nextLine();
+
+                                            boolean attivo = stato == 1;
+
+                                            DistributoreAutomatico dist = new DistributoreAutomatico(nome,attivo);
+
+                                            RivenditoreDAO.save(dist);
+
+                                            System.out.println("Distributore automatico salvato:");
+                                            System.out.println(dist);
+
+                                        } else {
+                                            System.out.println("Scelta non valida.");
+                                        }
+
+                                    } catch (Exception e) {
+                                        System.out.println("Errore inserimento rivenditore: " + e.getMessage());
+                                    }
+                                    break;
+                                case 0:
+                                    System.out.println("Ritorno al menu principale");
+                                    break;
+                                default:
+                                    System.out.println("Scelta non valida");
+                            }
+                        } while (sceltaInserimento != 0);
+                    } catch (Exception e) {
+                        System.out.println("Errore nel menu inserimento: " + e.getMessage());
+                    }
                     break;
 
                 case 0:
