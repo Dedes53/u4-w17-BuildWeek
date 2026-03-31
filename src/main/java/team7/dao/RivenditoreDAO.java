@@ -59,11 +59,9 @@ public class RivenditoreDAO {
             t.setRivenditore(rGestito);
             em.persist(t);
             transaction.commit();
-            return t;
         } catch (Exception e) {
             System.out.println(e.getMessage());
-        } finally {
-            em.close();
         }
+        return t;
     }
 }
