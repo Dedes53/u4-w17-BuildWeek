@@ -319,12 +319,12 @@ public class Application {
                                     // chiedi dati percorrenza
                                     try {
                                         System.out.println("Inserisci id del mezzo:");
-                                        String idMezzo = scanner.nextLine();
+                                        String idmezzo = scanner.nextLine();
 
                                         System.out.println("Inserisci id della tratta:");
                                         String idTratta = scanner.nextLine();
 
-                                        Mezzo mezzo = mezzoDAO.findById(idMezzo);
+                                        Mezzo mezzo = mezzoDAO.findById(idmezzo);
                                         Tratta tratta = trattaDAO.trovaPerID(idTratta);
 
                                         System.out.println("Inserisci anno partenza:");

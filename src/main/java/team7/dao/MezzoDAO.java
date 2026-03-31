@@ -3,6 +3,8 @@ package team7.dao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import team7.entities.Mezzo;
+import team7.exeption.NonTrovato;
+
 import java.util.UUID;
 
 public class MezzoDAO {
@@ -22,9 +24,10 @@ public class MezzoDAO {
         transaction.commit();
     }
 
-    public Mezzo findById(UUID id) {
-        // per cercare un mezzo tramite il suo id
-        return em.find(Mezzo.class, id);
+    public Mezzo findById(String id) {
+       Mezzo trovato=em.find(Mezzo.class,UUID.fromString(id));
+        if(trovato== null) throw new NonTrovato(id);
+        return trovato;
     }
 
     public void update(Mezzo mezzo) {
