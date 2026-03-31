@@ -254,11 +254,10 @@ public class Application {
 
                     break;
                 case 10:
-                    System.out.println("Inserimento manuale");
                     try {
                         int sceltaInserimento;
                         do {
-                            System.out.println("=== MENU INSERIMENTO ===");
+                            System.out.println("MENU INSERIMENTO");
                             System.out.println("1 - Salva mezzo");
                             System.out.println("2 - Salva tratta");
                             System.out.println("3 - Salva percorrenza");
