@@ -96,4 +96,16 @@ public class Percorrenza {
     public void setTempoEffettivoPercorrenza(Duration tempoEffettivoPercorrenza) {
         this.tempoEffettivoPercorrenza = tempoEffettivoPercorrenza;
     }
+
+    @Override
+    public String toString() {
+        return "Percorrenza{" +
+                "id=" + id +
+                ", mezzo=" + mezzo +
+                ", tratta=" + tratta +
+                ", dataOraPartenza=" + dataOraPartenza +
+                ", dataOraArrivo=" + dataOraArrivo +
+                ", tempoEffettivoPercorrenza=" + tempoEffettivoPercorrenza +
+                '}';
+    }
 }
