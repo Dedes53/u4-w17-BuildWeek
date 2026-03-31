@@ -53,7 +53,7 @@ public class Application {
             System.out.println("\nPeriodo di stato salvato:");
             System.out.println(periodoManutenzione);
 
-            // 5) opzionale: simulo il ritorno in servizio
+            // 5) simulo il ritorno in servizio
             periodoManutenzione.setDataFine(LocalDate.now().plusDays(2));
 
             bus1.setStatoAttuale(StatoMezzo.IN_SERVIZIO);
