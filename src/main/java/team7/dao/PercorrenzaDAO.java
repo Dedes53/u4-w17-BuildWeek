@@ -2,7 +2,7 @@ package team7.dao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
-import org.hibernate.sql.ast.tree.expression.Duration;
+import java.time.Duration;
 import team7.entities.Percorrenza;
 import java.time.LocalDateTime;
 import java.util.List;
