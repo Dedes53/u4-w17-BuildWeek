@@ -1,7 +1,5 @@
 package team7.entities;
 
-import java.util.UUID;
-
 public class DistributoreAutomatico extends Rivenditore {
 
     //   attributi
@@ -12,8 +10,8 @@ public class DistributoreAutomatico extends Rivenditore {
     protected DistributoreAutomatico() {
     }
 
-    public DistributoreAutomatico(UUID rivenditoreId, String nomeAttivita, boolean attivo) {
-        super(rivenditoreId, nomeAttivita);
+    public DistributoreAutomatico(String nomeAttivita, boolean attivo) {
+        super(nomeAttivita);
         this.attivo = attivo;
     }
 
