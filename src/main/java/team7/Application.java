@@ -540,36 +540,3 @@ public class Application {
     }
 
 }
-
-
-/*
-        try {
-            System.out.println(" INIZIO TEST MEZZI ");
-
-            // creo un mezzo
-            Mezzo bus1 = new Mezzo("BUS-01", TipoMezzo.BUS, StatoMezzo.IN_SERVIZIO, 80);
-
-            // salvo il mezzo e creo automaticamente anche il primo periodo iniziale
-            mezzoDAO.save(bus1);
-            System.out.println("Mezzo salvato:");
-            System.out.println(bus1);
-
-            // passaggio automatico in manutenzione
-            mezzoDAO.cambiaStato(bus1.getId().toString(), StatoMezzo.IN_MANUTENZIONE, LocalDate.now());
-
-            System.out.println("Mezzo aggiornato in manutenzione:");
-            System.out.println(mezzoDAO.findById(bus1.getId().toString()));
-
-            // ritorno automatico in servizio
-            mezzoDAO.cambiaStato(bus1.getId().toString(), StatoMezzo.IN_SERVIZIO, LocalDate.now().plusDays(2));
-
-            System.out.println("Mezzo tornato in servizio:");
-            System.out.println(mezzoDAO.findById(bus1.getId().toString()));
-
-
-
-        } catch (Exception e) {
-            System.out.println("Errore: " + e.getMessage());
-            e.printStackTrace();
-        }
-*/
