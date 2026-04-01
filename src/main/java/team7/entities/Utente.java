@@ -1,9 +1,11 @@
 package team7.entities;
+
 import jakarta.persistence.*;
 
 import java.util.UUID;
 
 @Entity
+
 public class Utente {
 
     @Id
@@ -13,13 +15,24 @@ public class Utente {
     private String nome;
     private String cognome;
 
+    @OneToOne
+    @JoinColumn(name = "tessera_utente")
+    private Tessera tessera;
 
-    public UUID getId() {
-        return id;
+    //costruttori
+    protected Utente() {
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public Utente(String nome, String cognome, Tessera tessera) {
+        this.nome = nome;
+        this.cognome = cognome;
+        this.tessera = tessera;
+    }
+
+
+    //   getters/setters
+    public UUID getId() {
+        return id;
     }
 
     public String getCognome() {
@@ -35,6 +48,24 @@ public class Utente {
     }
 
     public void setNome(String nome) {
-        this.nome =nome;
+        this.nome = nome;
+    }
+
+    public Tessera getTessera() {
+        return this.tessera;
+    }
+
+    public void setTessera(Tessera tessera) {
+        this.tessera = tessera;
+    }
+
+    @Override
+    public String toString() {
+        return "Utente{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", cognome='" + cognome + '\'' +
+                ", tessera=" + tessera +
+                '}';
     }
 }

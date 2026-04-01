@@ -1,5 +1,9 @@
 package team7.entities;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.ManyToOne;
 import team7.enumm.TipoAbbonamento;
 
 import java.time.LocalDate;
@@ -15,6 +19,7 @@ public class Abbonamento extends TitoloViaggio {
 
     @ManyToOne
     private Tessera tessera;
+
 
     public TipoAbbonamento getTipo() {
         return tipo;
