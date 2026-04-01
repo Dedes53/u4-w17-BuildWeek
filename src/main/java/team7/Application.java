@@ -27,7 +27,7 @@ public class Application {
         //per tratta e per percorrenza
         TrattaDAO trattaDAO = new TrattaDAO(em);
         PercorrenzaDAO percorrenzaDAO = new PercorrenzaDAO(em);
-
+        //per rivenditore
         RivenditoreDAO rivenditoreDAO = new RivenditoreDAO(em);
 
         try {
