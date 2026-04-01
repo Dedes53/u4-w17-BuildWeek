@@ -32,4 +32,31 @@ public abstract class TitoloViaggio {
         this.codiceUnivoco = r.generaCodiceUnivoco();
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getCodiceUnivoco() {
+        return codiceUnivoco;
+    }
+
+    public void setCodiceUnivoco(String codiceUnivoco) {
+        this.codiceUnivoco = codiceUnivoco;
+    }
+
+    public LocalDate getDataEmissione() {
+        return dataEmissione;
+    }
+
+    public void setDataEmissione(LocalDate dataEmissione) {
+        this.dataEmissione = dataEmissione;
+    }
+
+    public Rivenditore getRivenditore() {
+        return rivenditore;
+    }
 }
