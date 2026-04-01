@@ -29,8 +29,10 @@ public class Application {
         PercorrenzaDAO percorrenzaDAO = new PercorrenzaDAO(em);
         //per rivenditore
         RivenditoreDAO rivenditoreDAO = new RivenditoreDAO(em);
+        //per utente
 
-        //raffi
+        //da qua salviamo utenti, mezzi,tratte, percorrenze
+
 
         Scanner scanner = new Scanner(System.in);
         int scelta;
@@ -55,6 +57,7 @@ public class Application {
                     case 1:
                         // TEST UTENTEDAO
 
+
                         break;
 
                     case 2:
@@ -69,6 +72,7 @@ public class Application {
 
                     case 4:
                         // TEST BIGLIETTODAO
+
 
                         break;
 
@@ -114,16 +118,6 @@ public class Application {
                         System.out.println("Tutte le tratte:");
                         trattaDAO.TrovaTutteLeTratte().forEach(t ->
                                 System.out.println(t.getId() + " - " + t.getZonaPartenza() + " -> " + t.getZonaFinale() + " - " + t.getTempoPercorrenzaFormattato()));
-
-                        // - cerca tratte per partenza
-                        // TODO: da fare quando hai un metodo tipo trovaPerZonaPartenza(String zonaPartenza)
-
-                        // - cerca tratte per capolinea
-                        // TODO: da fare quando hai un metodo tipo trovaPerZonaFinale(String zonaFinale)
-
-                        // - aggiorna tempo previsto
-                        // TODO: da fare quando hai un metodo update nel TrattaDAO
-                        break;
 
                     case 9:
                         // TEST PERCORRENZADAO

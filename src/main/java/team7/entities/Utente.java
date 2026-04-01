@@ -35,6 +35,6 @@ public class Utente {
     }
 
     public void setNome(String nome) {
-        this.nome =sasso;
+        this.nome =nome;
     }
 }
