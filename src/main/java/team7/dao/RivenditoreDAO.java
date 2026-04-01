@@ -55,7 +55,7 @@ public class RivenditoreDAO {
         EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
-            Rivenditore rGestito = em.merge(r);
+            Rivenditore rGestito = em.merge(r); //siccome il codice si incrementa continuamente, ma non si aggiorna automaticamente nel database, con merge trova la differenza e la aggiorna
             t.setRivenditore(rGestito);
             em.persist(t);
             transaction.commit();

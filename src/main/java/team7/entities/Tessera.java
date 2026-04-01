@@ -1,4 +1,5 @@
 package team7.entities;
+
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -18,6 +19,7 @@ public class Tessera {
 
     @ManyToOne
     private Utente utente;
+
 
     public UUID getId() {
         return id;
