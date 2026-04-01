@@ -8,6 +8,9 @@ import team7.entities.*;
 import team7.enumm.StatoMezzo;
 import team7.enumm.TipoMezzo;
 
+// aggiungere trim() allo scanner...chiedere raffa o fede
+
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Scanner;
@@ -31,7 +34,7 @@ public class Application {
         RivenditoreDAO rivenditoreDAO = new RivenditoreDAO(em);
         //per utente
 
-        //da qua salviamo utenti, mezzi,tratte, percorrenze
+        //da qua salviamo utenti, mezzi, tratte, percorrenze
 
 
         Scanner scanner = new Scanner(System.in);
@@ -49,6 +52,7 @@ public class Application {
                 System.out.println("7 Test PeriodoStatoMezzoDAO");
                 System.out.println("8 Test TrattaDAO");
                 System.out.println("9 Test PercorrenzaDAO");
+                System.out.println("10 Controllo amministratore");
                 System.out.println("0 Esci");
 
                 scelta = scanner.nextInt();
@@ -118,7 +122,7 @@ public class Application {
                         System.out.println("Tutte le tratte:");
                         trattaDAO.TrovaTutteLeTratte().forEach(t ->
                                 System.out.println(t.getId() + " - " + t.getZonaPartenza() + " -> " + t.getZonaFinale() + " - " + t.getTempoPercorrenzaFormattato()));
-
+                        break;
                     case 9:
                         // TEST PERCORRENZADAO
                         // - registra una percorrenza di un mezzo su una tratta
@@ -183,6 +187,15 @@ public class Application {
 
                         break;
                     case 10:
+
+                        int passcode =5432;
+                        System.out.println("Inserisci il passcode:");
+                        int pass = scanner.nextInt();
+                        scanner.nextLine();
+                        if(passcode != pass){
+                            System.out.println(" passcode errata! ");
+                            break;
+                        }
                         try {
                             int sceltaInserimento;
                             do {
@@ -198,33 +211,62 @@ public class Application {
                                 switch (sceltaInserimento) {
                                     case 1:
                                         System.out.println("Inserisci codice del mezzo:");
-                                        String codice = scanner.nextLine();
+                                        String codice = scanner.nextLine().trim();
 
                                         System.out.println("Inserisci 1 se il mezzo è un Tram o 2 se è un Bus:");
+
+                                        if (!scanner.hasNextInt()) {
+                                            System.out.println("Input non valido!");
+                                            scanner.nextLine();
+                                            break;
+                                        }
+
                                         int sceltaTipo = scanner.nextInt();
                                         scanner.nextLine();
 
                                         TipoMezzo tipo;
+
                                         if (sceltaTipo < 1 || sceltaTipo > 2) {
-                                            System.out.println("numero digitatato errato...ripetere operazione");
+                                            System.out.println("Numero digitato errato... ripetere operazione");
                                             break;
                                         }
+
                                         if (sceltaTipo == 1) {
                                             tipo = TipoMezzo.TRAM;
                                         } else {
                                             tipo = TipoMezzo.BUS;
                                         }
 
-                                        System.out.println("Inserisci capienza del mezzo:");
-                                        int capienza = scanner.nextInt();
-                                        scanner.nextLine();
+                                        int capienza = 0;
+                                        boolean valida = false;
+
+                                        while (!valida) {
+                                            System.out.println("Inserisci capienza:");
+
+                                            if (!scanner.hasNextInt()) {
+                                                System.out.println("Inserisci un numero valido!");
+                                                scanner.nextLine();
+                                                continue;
+                                            }
+
+                                            capienza = scanner.nextInt();
+                                            scanner.nextLine();
+
+                                            if (tipo == TipoMezzo.TRAM && (capienza < 50 || capienza > 300)) {
+                                                System.out.println("Capienza non valida per tram (50-300)");
+                                            } else if (tipo == TipoMezzo.BUS && (capienza < 20 || capienza > 50)) {
+                                                System.out.println("Capienza non valida per bus (20-120)");
+                                            } else {
+                                                valida = true;
+                                            }
+                                        }
 
                                         Mezzo mezzoNuovo = new Mezzo(codice, tipo, StatoMezzo.IN_SERVIZIO, capienza);
-
                                         mezzoDAO.save(mezzoNuovo);
 
                                         System.out.println("Mezzo salvato:");
                                         System.out.println(mezzoNuovo);
+                                        break;
                                     case 2:
                                         // chiedi dati tratta
                                         System.out.println("Inserisci zona di partenza:");
