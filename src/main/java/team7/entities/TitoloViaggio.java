@@ -23,15 +23,18 @@ public abstract class TitoloViaggio {
     private Rivenditore rivenditore;
 
 
+    //    costruttori
     protected TitoloViaggio() {
     }
 
-    public void setRivenditore(Rivenditore r) {
-        this.rivenditore = r;
-        this.dataEmissione = LocalDate.now();
-        this.codiceUnivoco = r.generaCodiceUnivoco();
+    public TitoloViaggio(String codiceUnivoco, LocalDate dataEmissione, Rivenditore rivenditore) {
+        this.codiceUnivoco = codiceUnivoco;
+        this.dataEmissione = dataEmissione;
+        this.rivenditore = rivenditore;
     }
 
+
+    //    getters/setters
     public UUID getId() {
         return id;
     }
@@ -59,4 +62,22 @@ public abstract class TitoloViaggio {
     public Rivenditore getRivenditore() {
         return rivenditore;
     }
+
+    public void setRivenditore(Rivenditore r) {
+        this.rivenditore = r;
+        this.dataEmissione = LocalDate.now();
+        this.codiceUnivoco = r.generaCodiceUnivoco();
+    }
+
+    @Override
+    public String toString() {
+        return "TitoloViaggio{" +
+                "id=" + id +
+                ", codiceUnivoco='" + codiceUnivoco + '\'' +
+                ", dataEmissione=" + dataEmissione +
+                ", rivenditore=" + rivenditore +
+                '}';
+    }
+
+
 }

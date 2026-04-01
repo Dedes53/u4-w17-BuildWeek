@@ -21,6 +21,20 @@ public class Abbonamento extends TitoloViaggio {
     private Tessera tessera;
 
 
+    //    costruttori
+    protected Abbonamento() {
+    }
+
+    public Abbonamento(String codiceUnivoco, LocalDate dataEmissione, Rivenditore rivenditore, TipoAbbonamento tipo, LocalDate dataInizio, LocalDate dataFine, Tessera tessera) {
+        super(codiceUnivoco, dataEmissione, rivenditore);
+        this.tipo = tipo;
+        this.dataInizio = dataInizio;
+        this.dataFine = dataFine;
+        this.tessera = tessera;
+    }
+
+
+    //    getters/setters
     public TipoAbbonamento getTipo() {
         return tipo;
     }
@@ -51,5 +65,15 @@ public class Abbonamento extends TitoloViaggio {
 
     public void setTessera(Tessera tessera) {
         this.tessera = tessera;
+    }
+
+    @Override
+    public String toString() {
+        return "Abbonamento{" +
+                "tipo=" + tipo +
+                ", dataInizio=" + dataInizio +
+                ", dataFine=" + dataFine +
+                ", tessera=" + tessera +
+                '}';
     }
 }
