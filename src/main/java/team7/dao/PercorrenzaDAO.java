@@ -63,4 +63,11 @@ public class PercorrenzaDAO {
         query.setParameter("mezzoId", UUID.fromString(mezzoId));
         return query.getSingleResult();
     }
+    // calcola tempo tra una percorrenza e l'altra
+    public Double CalcolaTempotraPercorrenze(UUID idP) {
+        TypedQuery<Double> query = em.createQuery("SELECT (p.tempoEffettivoPercorrenza - p.dataOraPartenza ) FROM PErcorrenza p WHERE p.id=:id ", Double.class);
+        query.setParameter("id",idP);
+        return query.getSingleResult();
+
+    }
 }

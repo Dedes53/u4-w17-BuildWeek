@@ -57,5 +57,13 @@ public void cancellaTratta(String id) {
         throw e;
     }
 }
+// questa dovrebbe fa il conteggio delle volte che si percorre una tratta
+//pero cosi conto solo quante righe ci sono..dovrei penso contare con il titolo di viaggio
+    // forse ...SELECT COUNT(t) FROM TitoloVIaggio t WHERE t=:tratta
+public long ContaVolteperTratta(Tratta tratta){
+    TypedQuery<Long> query = em.createQuery("SELECT COUNT(t) FROM Tratta t WHERE t=:tratta", Long.class);
+    query.setParameter("tratta",tratta);
+    return query.getSingleResult();
+}
 
 }
