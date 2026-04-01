@@ -8,11 +8,43 @@ import java.time.LocalDate;
 public class Abbonamento extends TitoloViaggio {
 
     @Enumerated(EnumType.STRING)
-    private TipoAbbonamento tipo; //TODO ENUM PER TIPO, devo creare l'enum per definire se è un settimanale, mensile ecc ecc...
+    private TipoAbbonamento tipo;
 
     private LocalDate dataInizio;
     private LocalDate dataFine;
 
     @ManyToOne
     private Tessera tessera;
+
+    public TipoAbbonamento getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoAbbonamento tipo) {
+        this.tipo = tipo;
+    }
+
+    public LocalDate getDataInizio() {
+        return dataInizio;
+    }
+
+    public void setDataInizio(LocalDate dataInizio) {
+        this.dataInizio = dataInizio;
+    }
+
+    public LocalDate getDataFine() {
+        return dataFine;
+    }
+
+    public void setDataFine(LocalDate dataFine) {
+        this.dataFine = dataFine;
+    }
+
+    public Tessera getTessera() {
+        return tessera;
+    }
+
+    public void setTessera(Tessera tessera) {
+        this.tessera = tessera;
+    }
 }
