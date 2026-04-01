@@ -1,4 +1,5 @@
 package team7;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -7,9 +8,9 @@ import team7.entities.*;
 import team7.enumm.StatoMezzo;
 import team7.enumm.TipoMezzo;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Scanner;
-import java.time.LocalDate;
 
 public class Application {
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("team7");
@@ -26,6 +27,8 @@ public class Application {
         //per tratta e per percorrenza
         TrattaDAO trattaDAO = new TrattaDAO(em);
         PercorrenzaDAO percorrenzaDAO = new PercorrenzaDAO(em);
+
+        RivenditoreDAO rivenditoreDAO = new RivenditoreDAO(em);
 
         try {
             System.out.println("=== INIZIO TEST MEZZI ===");
@@ -243,7 +246,7 @@ public class Application {
                                         scanner.nextLine();
 
                                         TipoMezzo tipo;
-                                        if(sceltaTipo <1 || sceltaTipo> 2){
+                                        if (sceltaTipo < 1 || sceltaTipo > 2) {
                                             System.out.println("numero digitatato errato...ripetere operazione");
                                             break;
                                         }
@@ -356,7 +359,7 @@ public class Application {
                                                 // Rivenditore autorizzato
                                                 RivenditoreAutorizzato riv = new RivenditoreAutorizzato(nome);
 
-                                                RivenditoreDAO.save(riv);
+                                                rivenditoreDAO.save(riv);
 
                                                 System.out.println("Rivenditore autorizzato salvato:");
                                                 System.out.println(riv);
@@ -369,9 +372,9 @@ public class Application {
 
                                                 boolean attivo = stato == 1;
 
-                                                DistributoreAutomatico dist = new DistributoreAutomatico(nome,attivo);
+                                                DistributoreAutomatico dist = new DistributoreAutomatico(nome, attivo);
 
-                                                RivenditoreDAO.save(dist);
+                                                rivenditoreDAO.save(dist);
 
                                                 System.out.println("Distributore automatico salvato:");
                                                 System.out.println(dist);
