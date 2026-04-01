@@ -30,35 +30,6 @@ public class Application {
         //per rivenditore
         RivenditoreDAO rivenditoreDAO = new RivenditoreDAO(em);
 
-        try {
-            System.out.println("=== INIZIO TEST MEZZI ===");
-
-            // creo un mezzo
-            Mezzo bus1 = new Mezzo("BUS-01", TipoMezzo.BUS, StatoMezzo.IN_SERVIZIO, 80);
-
-            // salvo il mezzo e creo automaticamente anche il primo periodo iniziale
-            mezzoDAO.save(bus1);
-            System.out.println("Mezzo salvato:");
-            System.out.println(bus1);
-
-            // passaggio automatico in manutenzione
-            mezzoDAO.cambiaStato(bus1.getId().toString(), StatoMezzo.IN_MANUTENZIONE, LocalDate.now());
-
-            System.out.println("Mezzo aggiornato in manutenzione:");
-            System.out.println(mezzoDAO.findById(bus1.getId().toString()));
-
-            // ritorno automatico in servizio
-            mezzoDAO.cambiaStato(bus1.getId().toString(), StatoMezzo.IN_SERVIZIO, LocalDate.now().plusDays(2));
-
-            System.out.println("Mezzo tornato in servizio:");
-            System.out.println(mezzoDAO.findById(bus1.getId().toString()));
-
-            System.out.println("=== FINE TEST ===");
-
-        } catch (Exception e) {
-            System.out.println("Errore: " + e.getMessage());
-            e.printStackTrace();
-        }
         //raffi
 
         Scanner scanner = new Scanner(System.in);
@@ -66,17 +37,17 @@ public class Application {
 
         try {
             do {
-                System.out.println("===== MENU  =====");
-                System.out.println("1 - Test UtenteDAO");
-                System.out.println("2 - Test TesseraDAO");
-                System.out.println("3 - Test AbbonamentoDAO");
-                System.out.println("4 - Test BigliettoDAO");
-                System.out.println("5 - Test RivenditoreDAO");
-                System.out.println("6 - Test MezzoDAO");
-                System.out.println("7 - Test PeriodoStatoMezzoDAO");
-                System.out.println("8 - Test TrattaDAO");
-                System.out.println("9 - Test PercorrenzaDAO");
-                System.out.println("0 - Esci");
+                System.out.println("MENU ");
+                System.out.println("1 Test UtenteDAO");
+                System.out.println("2 Test TesseraDAO");
+                System.out.println("3 Test AbbonamentoDAO");
+                System.out.println("4 Test BigliettoDAO");
+                System.out.println("5 Test RivenditoreDAO");
+                System.out.println("6 Test MezzoDAO");
+                System.out.println("7 Test PeriodoStatoMezzoDAO");
+                System.out.println("8 Test TrattaDAO");
+                System.out.println("9 Test PercorrenzaDAO");
+                System.out.println("0 Esci");
 
                 scelta = scanner.nextInt();
 
@@ -142,13 +113,7 @@ public class Application {
                         // - stampa tutte le tratte
                         System.out.println("Tutte le tratte:");
                         trattaDAO.TrovaTutteLeTratte().forEach(t ->
-                                System.out.println(
-                                        t.getId() + " - " +
-                                                t.getZonaPartenza() + " -> " +
-                                                t.getZonaFinale() + " - " +
-                                                t.getTempoPercorrenzaFormattato()
-                                )
-                        );
+                                System.out.println(t.getId() + " - " + t.getZonaPartenza() + " -> " + t.getZonaFinale() + " - " + t.getTempoPercorrenzaFormattato()));
 
                         // - cerca tratte per partenza
                         // TODO: da fare quando hai un metodo tipo trovaPerZonaPartenza(String zonaPartenza)
@@ -228,11 +193,11 @@ public class Application {
                             int sceltaInserimento;
                             do {
                                 System.out.println("MENU INSERIMENTO");
-                                System.out.println("1 - Salva mezzo");
-                                System.out.println("2 - Salva tratta");
-                                System.out.println("3 - Salva percorrenza");
-                                System.out.println("4 - Salva rivenditore");
-                                System.out.println("0 - Torna indietro");
+                                System.out.println("1  Salva mezzo");
+                                System.out.println("2  Salva tratta");
+                                System.out.println("3  Salva percorrenza");
+                                System.out.println("4  Salva rivenditore");
+                                System.out.println("0  Torna indietro");
 
                                 sceltaInserimento = scanner.nextInt();
 
@@ -420,3 +385,36 @@ public class Application {
     }
 
 }
+
+
+/*
+        try {
+            System.out.println(" INIZIO TEST MEZZI ");
+
+            // creo un mezzo
+            Mezzo bus1 = new Mezzo("BUS-01", TipoMezzo.BUS, StatoMezzo.IN_SERVIZIO, 80);
+
+            // salvo il mezzo e creo automaticamente anche il primo periodo iniziale
+            mezzoDAO.save(bus1);
+            System.out.println("Mezzo salvato:");
+            System.out.println(bus1);
+
+            // passaggio automatico in manutenzione
+            mezzoDAO.cambiaStato(bus1.getId().toString(), StatoMezzo.IN_MANUTENZIONE, LocalDate.now());
+
+            System.out.println("Mezzo aggiornato in manutenzione:");
+            System.out.println(mezzoDAO.findById(bus1.getId().toString()));
+
+            // ritorno automatico in servizio
+            mezzoDAO.cambiaStato(bus1.getId().toString(), StatoMezzo.IN_SERVIZIO, LocalDate.now().plusDays(2));
+
+            System.out.println("Mezzo tornato in servizio:");
+            System.out.println(mezzoDAO.findById(bus1.getId().toString()));
+
+
+
+        } catch (Exception e) {
+            System.out.println("Errore: " + e.getMessage());
+            e.printStackTrace();
+        }
+*/

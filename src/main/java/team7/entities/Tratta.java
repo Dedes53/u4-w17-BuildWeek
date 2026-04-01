@@ -59,4 +59,14 @@ public String getTempoPercorrenzaFormattato(){
     public void setDurata(Duration durata) {
         this.durata = durata;
     }
+
+    @Override
+    public String toString() {
+        return "Tratta{" +
+                "id=" + id +
+                ", zonaPartenza='" + zonaPartenza + '\'' +
+                ", zonaFinale='" + zonaFinale + '\'' +
+                ", durata=" + durata +
+                '}';
+    }
 }

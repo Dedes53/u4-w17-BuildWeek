@@ -33,9 +33,7 @@ public class PercorrenzaDAO {
     // trova per tratta id
     public List<Percorrenza> TrovaTratta(String trattaId) {
         TypedQuery<Percorrenza> query = em.createQuery("SELECT p FROM Percorrenza p WHERE p.tratta.id = :trattaId", Percorrenza.class);
-
         query.setParameter("trattaId", UUID.fromString(trattaId));
-
         return query.getResultList();
     }
 
@@ -65,6 +63,4 @@ public class PercorrenzaDAO {
         query.setParameter("mezzoId", UUID.fromString(mezzoId));
         return query.getSingleResult();
     }
-
-
 }
