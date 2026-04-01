@@ -5,6 +5,7 @@ import jakarta.persistence.EntityTransaction;
 import team7.entities.Mezzo;
 import team7.entities.PeriodoStatoMezzo;
 import team7.enumm.StatoMezzo;
+import team7.enumm.TipoMezzo;
 import team7.exeption.NonTrovato;
 
 import java.time.LocalDate;
@@ -14,15 +15,12 @@ import java.util.UUID;
 public class MezzoDAO {
 
     private final EntityManager em;
-    // variabile che contiene l'EntityManager.
+
     public MezzoDAO(EntityManager em) {
-        // costruttore che riceve l'EntityManager e lo assegna alla variabile em
         this.em = em;
     }
 
     public void save(Mezzo mezzo) {
-        // per salvare un nuovo mezzo nel database
-        // e creare automaticamente il primo periodo iniziale
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
 
@@ -45,8 +43,35 @@ public class MezzoDAO {
         return trovato;
     }
 
+    // cerca un mezzo tramite codiceMezzo
+    public Mezzo findByCodice(String codiceMezzo) {
+        List<Mezzo> risultati = em.createQuery(
+                "SELECT m FROM Mezzo m WHERE m.codiceMezzo = :codice",
+                Mezzo.class
+        ).setParameter("codice", codiceMezzo).getResultList();
+
+        if (risultati.isEmpty()) {
+            return null;
+        }
+
+        return risultati.get(0);
+    }
+
+    public List<Mezzo> findByTipo(TipoMezzo tipoMezzo) {
+        return em.createQuery(
+                "SELECT m FROM Mezzo m WHERE m.tipoMezzo = :tipo",
+                Mezzo.class
+        ).setParameter("tipo", tipoMezzo).getResultList();
+    }
+
+    public List<Mezzo> findByStato(StatoMezzo stato) {
+        return em.createQuery(
+                "SELECT m FROM Mezzo m WHERE m.statoAttuale = :stato",
+                Mezzo.class
+        ).setParameter("stato", stato).getResultList();
+    }
+
     public void update(Mezzo mezzo) {
-        // per aggiornare un mezzo già esistente nel database
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         em.merge(mezzo);
@@ -64,29 +89,24 @@ public class MezzoDAO {
             throw new NonTrovato(id);
         }
 
-        // se il mezzo è già in questo stato non faccio niente
         if (mezzo.getStatoAttuale() == nuovoStato) {
             transaction.commit();
             return;
         }
 
-        // cerco il periodo attivo aperto del mezzo
         List<PeriodoStatoMezzo> periodiAttivi = em.createQuery(
                 "SELECT p FROM PeriodoStatoMezzo p WHERE p.mezzo.id = :mezzoId AND p.dataFine IS NULL",
                 PeriodoStatoMezzo.class
         ).setParameter("mezzoId", mezzo.getId()).getResultList();
 
-        // chiudo il periodo attivo, se esiste
         if (!periodiAttivi.isEmpty()) {
             PeriodoStatoMezzo periodoAttivo = periodiAttivi.get(0);
             periodoAttivo.setDataFine(dataCambio);
         }
 
-        // aggiorno lo stato attuale del mezzo
         mezzo.setStatoAttuale(nuovoStato);
         em.merge(mezzo);
 
-        // creo il nuovo periodo di stato
         PeriodoStatoMezzo nuovoPeriodo = new PeriodoStatoMezzo(
                 mezzo,
                 nuovoStato,
@@ -99,14 +119,23 @@ public class MezzoDAO {
     }
 
     public void delete(UUID id) {
-        // per eliminare un mezzo dal database usando il suo id
-
         Mezzo mezzo = em.find(Mezzo.class, id);
+
         if (mezzo != null) {
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
             em.remove(mezzo);
             transaction.commit();
         }
+    }
+
+    // cancella tutti i mezzi
+    public void deleteAll() {
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+
+        em.createQuery("DELETE FROM Mezzo").executeUpdate();
+
+        transaction.commit();
     }
 }
