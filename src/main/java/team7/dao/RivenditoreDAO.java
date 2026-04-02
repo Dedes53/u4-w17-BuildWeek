@@ -75,6 +75,7 @@ public class RivenditoreDAO {
         return b;
     }
 
+    //todo ricerca tessera utente
     public Abbonamento emettiAbbonamento(Rivenditore r, TipoAbbonamento tipoAbbonamento) {
         EntityTransaction t = em.getTransaction();
         Abbonamento a = new Abbonamento(r, tipoAbbonamento);
@@ -121,4 +122,6 @@ public class RivenditoreDAO {
             System.out.println(e.getMessage());
         }
     }
+
+    
 }

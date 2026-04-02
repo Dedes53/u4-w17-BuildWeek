@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NamedQuery;
 import team7.entities.Abbonamento;
+import team7.entities.Tessera;
 import team7.entities.Utente;
 import team7.exeption.NonTrovato;
 
@@ -42,7 +43,6 @@ public class UtenteDAO {
 
     public void save(Utente u) {
         EntityTransaction t = em.getTransaction();
-
         try {
             t.begin();
             em.persist(u);
@@ -70,5 +70,24 @@ public class UtenteDAO {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    //   TESSERA
+    public void saveTessera(Tessera tessera) {
+        EntityTransaction t = em.getTransaction();
+        try {
+            t.begin();
+            em.persist(tessera);
+            t.commit();
+            System.out.println("Creazione tessera n." + tessera.getId() + " Per l'utente " + tessera.getUtente().getNome() + " " + tessera.getUtente().getCognome());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+ 
+    public Tessera creaNuovaTessera(Utente u) {
+        Tessera t = new Tessera(u);
+        this.saveTessera(t);
+        return t;
     }
 }
