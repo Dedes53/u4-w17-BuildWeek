@@ -55,7 +55,6 @@ public class RivenditoreDAO {
 
 
     //   EMETTI TITOLI DI VIAGGIO (biglietti e abbonamenti)
-    //TODO implementare controllo se il rivenditore è un distributore automatico -> se non attivo non può emettere titoli di viaggio
     public Biglietto emettiBiglietto(Rivenditore r) {
 
         EntityTransaction t = em.getTransaction();
@@ -78,7 +77,6 @@ public class RivenditoreDAO {
         }
     }
 
-    //todo ricerca tessera utente
     public Abbonamento emettiAbbonamento(Rivenditore r, TipoAbbonamento tipoAbbonamento, Tessera tessera) {
 
         //controllo il distributore automatico

@@ -3,6 +3,7 @@ package team7.entities;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -50,6 +51,13 @@ public class Biglietto extends TitoloViaggio {
         this.mezzoVidimazione = mezzoVidimazione;
     }
 
+    public void vidimazione(Mezzo mezzo, LocalDate dataVidimazione) {
+        this.dataDiVidimazione = dataDiVidimazione;
+        this.mezzoVidimazione = mezzo;
+        this.vidimato = true;
+    }
+
+    
     @Override
     public String toString() {
         return "Biglietto{" +
