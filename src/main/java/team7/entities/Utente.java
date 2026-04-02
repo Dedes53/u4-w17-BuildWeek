@@ -26,7 +26,6 @@ public class Utente {
     public Utente(String nome, String cognome) {
         this.nome = nome;
         this.cognome = cognome;
-       // this.tessera = tessera;
     }
 
 

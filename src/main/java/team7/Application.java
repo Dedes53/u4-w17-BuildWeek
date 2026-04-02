@@ -9,7 +9,6 @@ import team7.enumm.StatoMezzo;
 import team7.enumm.TipoAbbonamento;
 import team7.enumm.TipoMezzo;
 
-import java.util.List;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,15 +34,29 @@ public class Application {
         //per rivenditore
         RivenditoreDAO rivenditoreDAO = new RivenditoreDAO(em);
         //per utente
-        UtenteDAO utenteDAO=new UtenteDAO(em);
+        UtenteDAO utenteDAO = new UtenteDAO(em);
         //da qua salviamo utenti, mezzi, tratte, percorrenze
 
 
         Scanner scanner = new Scanner(System.in);
         int scelta;
+        //Utente crea
+        Utente u1 = new Utente("Mario", "Rossi");
+        Utente u2 = new Utente("Maurizio", "Verdi");
+        Utente u3 = new Utente("Massimo", "Bianchi");
 
+        utenteDAO.save(u1);
+        utenteDAO.save(u2);
+        utenteDAO.save(u3);//senza tessera
 
-//        TEST PER EMISSIONE BIGLIETTO
+        //tessera
+        Tessera t1 = utenteDAO.creaNuovaTessera(u1);
+        Tessera t2 = utenteDAO.creaNuovaTessera(u2);
+        //t1 salvato in data odierna
+        t2.setDataDiScadenza(LocalDate.of(2025, 10, 14));
+        utenteDAO.saveTessera(t2);
+
+        //        TEST PER EMISSIONE BIGLIETTO
         Rivenditore r1 = new RivenditoreAutorizzato("Bar Roma");
         Rivenditore r2 = new RivenditoreAutorizzato("Bar Coop");
 
@@ -55,12 +68,12 @@ public class Application {
         Biglietto b3 = rivenditoreDAO.emettiBiglietto(r2);
         Biglietto b4 = rivenditoreDAO.emettiBiglietto(r2);
 
-        Abbonamento a1 = rivenditoreDAO.emettiAbbonamento(r1, TipoAbbonamento.ANNUALE);
-        Abbonamento a2 = rivenditoreDAO.emettiAbbonamento(r1, TipoAbbonamento.MENSILE);
-        Abbonamento a3 = rivenditoreDAO.emettiAbbonamento(r1, TipoAbbonamento.SETTIMANALE);
-        Abbonamento a4 = rivenditoreDAO.emettiAbbonamento(r2, TipoAbbonamento.ANNUALE);
-        Abbonamento a5 = rivenditoreDAO.emettiAbbonamento(r2, TipoAbbonamento.MENSILE);
-        Abbonamento a6 = rivenditoreDAO.emettiAbbonamento(r2, TipoAbbonamento.SETTIMANALE);
+        Abbonamento a1 = rivenditoreDAO.emettiAbbonamento(r1, TipoAbbonamento.ANNUALE, t1);
+        Abbonamento a2 = rivenditoreDAO.emettiAbbonamento(r1, TipoAbbonamento.MENSILE, t1);
+        Abbonamento a3 = rivenditoreDAO.emettiAbbonamento(r1, TipoAbbonamento.SETTIMANALE, t2);
+        Abbonamento a4 = rivenditoreDAO.emettiAbbonamento(r2, TipoAbbonamento.ANNUALE, t1);
+        Abbonamento a5 = rivenditoreDAO.emettiAbbonamento(r2, TipoAbbonamento.MENSILE, t1);
+        Abbonamento a6 = rivenditoreDAO.emettiAbbonamento(r2, TipoAbbonamento.SETTIMANALE, t2);
 
         System.out.println("Biglietti dal primo rivenditore");
         System.out.println(b1);
@@ -79,24 +92,6 @@ public class Application {
         System.out.println(a4);
         System.out.println(a5);
         System.out.println(a6);
-
-        //Utente crea
-        Utente u1= new Utente("Mario","Rossi");
-        Utente u2= new Utente("Maurizio","Verdi");
-        Utente u3= new Utente("Massimo","Bianchi");
-
-        utenteDAO.save(u1);
-        utenteDAO.save(u2);
-        utenteDAO.save(u3);//senza tessera
-
-        //tessera
-        Tessera t1 = utenteDAO.creaNuovaTessera(u1);
-        Tessera t2 = utenteDAO.creaNuovaTessera(u2);
-        //t1 salvato in data odierna
-        t2.setDataDiScadenza(LocalDate.of(2025,10,14));
-        utenteDAO.saveTessera(t2);
-        
-
 
 
         try {
@@ -121,10 +116,10 @@ public class Application {
                         // Registrazione
                         System.out.println(" Registrazione avviata");
                         System.out.println("Fornire Nome");
-                        String nome=scanner.nextLine();
+                        String nome = scanner.nextLine();
                         System.out.println("Fornire Cognome");
-                        String cognome=scanner.nextLine();
-                        Utente ucrea= new Utente(nome,cognome);
+                        String cognome = scanner.nextLine();
+                        Utente ucrea = new Utente(nome, cognome);
                         utenteDAO.save(ucrea);
                         break;
 
@@ -542,7 +537,7 @@ public class Application {
                                             scanner.nextLine();
 
                                             System.out.println("Inserisci nome attività:");
-                                            String nome = scanner.nextLine();
+                                            nome = scanner.nextLine();
 
                                             if (sceltaRiv == 1) {
                                                 // Rivenditore autorizzato

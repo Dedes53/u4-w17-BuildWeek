@@ -4,12 +4,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NamedQuery;
-import team7.entities.Abbonamento;
-import team7.entities.Biglietto;
-import team7.entities.DistributoreAutomatico;
-import team7.entities.Rivenditore;
+import team7.entities.*;
 import team7.enumm.TipoAbbonamento;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -76,18 +74,25 @@ public class RivenditoreDAO {
     }
 
     //todo ricerca tessera utente
-    public Abbonamento emettiAbbonamento(Rivenditore r, TipoAbbonamento tipoAbbonamento) {
-        EntityTransaction t = em.getTransaction();
-        Abbonamento a = new Abbonamento(r, tipoAbbonamento);
-        try {
-            t.begin();
-            em.merge(r);
-            em.persist(a);
-            t.commit();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+    public Abbonamento emettiAbbonamento(Rivenditore r, TipoAbbonamento tipoAbbonamento, Tessera tessera) {
+        // controllo tessera
+        if (tessera.getDataDiScadenza().isBefore(LocalDate.now())) {
+            System.out.println("Impossibile emettere l'abbonamento richiesto. \n" +
+                    "La tessera dell'utente " + tessera.getUtente().getNome() + " " + tessera.getUtente().getCognome() + " è scaduta in data " + tessera.getDataDiScadenza());
+            return null;
+        } else {
+            EntityTransaction t = em.getTransaction();
+            Abbonamento a = new Abbonamento(r, tipoAbbonamento, tessera);
+            try {
+                t.begin();
+                em.merge(r);
+                em.persist(a);
+                t.commit();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+            return a;
         }
-        return a;
     }
 
 
@@ -123,5 +128,5 @@ public class RivenditoreDAO {
         }
     }
 
-    
+
 }

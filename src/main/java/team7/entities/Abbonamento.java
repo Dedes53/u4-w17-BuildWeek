@@ -25,7 +25,7 @@ public class Abbonamento extends TitoloViaggio {
     protected Abbonamento() {
     }
 
-    public Abbonamento(Rivenditore rivenditore, TipoAbbonamento tipo) {
+    public Abbonamento(Rivenditore rivenditore, TipoAbbonamento tipo, Tessera tessera) {
         super(rivenditore);
         this.tipo = tipo;
         this.dataInizio = LocalDate.now();
@@ -40,7 +40,7 @@ public class Abbonamento extends TitoloViaggio {
                 this.dataFine = dataInizio.plusYears(1);
                 break;
         }
-//        this.tessera = tessera;
+        this.tessera = tessera;
     }
 
 
