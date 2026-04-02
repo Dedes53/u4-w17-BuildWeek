@@ -84,7 +84,7 @@ public class Application {
                 System.out.println("2 Compra Biglietto");
                 System.out.println("3 Compra Abbonamento ");
                 System.out.println("4 Valida Abbonamento");
-                System.out.println("5 Test RivenditoreDAO");
+                System.out.println("5 ");
                 System.out.println("6 Test MezzoDAO");
                 System.out.println("7 Test PeriodoStatoMezzoDAO");
                 System.out.println("8 Test TrattaDAO");
@@ -362,6 +362,7 @@ public class Application {
                                 System.out.println("4  Salva rivenditore");
                                 System.out.println("5  Totale biglietti/abbonamenti emessi per tempo");
                                 System.out.println("6  Totale biglietti/abbonamenti emessi per mezzo");
+                                System.out.println("7  Storico Manutenzione");
 
                                 System.out.println("0  Torna indietro");
 
