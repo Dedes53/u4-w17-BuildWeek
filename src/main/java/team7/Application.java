@@ -14,6 +14,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
+
+import static java.lang.Integer.parseInt;
 // aggiungere trim() allo scanner...chiedere raffa o fede
 
 public class Application {
@@ -152,7 +155,7 @@ public class Application {
                 System.out.println("10 Controllo amministratore");
                 System.out.println("0 Esci");
 
-                scelta = scanner.nextInt();
+                scelta = parseInt(scanner.nextLine());
 
                 switch (scelta) {
                     case 1:
@@ -322,14 +325,13 @@ public class Application {
                         break;
 
                     case 8:
-                        // - TODO dio bono fai i metodi delle tratte
                         System.out.println("Menu delle Tratte ");
                         System.out.println("1 Trova tratta per id");
                         System.out.println("2 Mostra tutte le tratte");
                         System.out.println("3 Cancella tratta per id ");
                         System.out.println("4 Conta quante volte quella tratta e' stata percorsa");
 
-                        int sceltaTratta = Integer.parseInt(scanner.nextLine());
+                        int sceltaTratta = parseInt(scanner.nextLine());
                  switch (sceltaTratta){
                  case 1:
                  try{
@@ -372,41 +374,109 @@ public class Application {
                      }
                         break;
                     case 9:
-                        // TEST PERCORRENZADAO
-                        // - registra una percorrenza di un mezzo su una tratta
-                        // - salva tempo effettivo di percorrenza
-                        // - conta quante volte un mezzo ha percorso una tratta
-                        // - calcola il tempo medio effettivo di percorrenza
-                        // - stampa le percorrenze di un mezzo
-                        // - stampa le percorrenze di una tratta
-                        // TEST PERCORRENZADAO
+                        System.out.println("Menu delle Percorrenze ");
+                        System.out.println("1 Trova percorrenze per tratta  ");
+                        System.out.println("2 Trova percorrenze per mezzo");
+                        System.out.println("3 Trova percorrenze per periodo");
+                        System.out.println("4 Calcola tempo medio per tratta");
+                        System.out.println("5 Calcola tempo medio per tratta e mezzo");
+                        System.out.println("6 Calcola tempo tra percorrenze");
 
-                        // - salva tempo effettivo di percorrenza
-                        System.out.println("Tempo effettivo registrato correttamente.");
+                        int sceltaPercorrenza = parseInt(scanner.nextLine());
 
-                        // - conta quante volte un mezzo ha percorso una tratta
-                        // al momento, se non hai un count dedicato, stampi la size della lista
-                        /*
+                        switch (sceltaPercorrenza) {
+                            case 1:
+                                try {
+                                    System.out.println("Fornire id della tratta:");
+                                    String trattaId = scanner.nextLine();
 
+                                    List<Percorrenza> listapercorrenze = percorrenzaDAO.TrovaTratta(trattaId);
+                                    System.out.println("lista delle percorrenze trovate");
+                                    listapercorrenze.forEach(System.out::println);
 
-                        int numeroPercorrenze = percorrenzaDAO.trovaPerMezzo(mezzoPercorrenza.getId().toString()).size();
-                        System.out.println("Numero percorrenze del mezzo: " + numeroPercorrenze);
+                                } catch (Exception e) {
+                                    System.out.println("Errore: " + e.getMessage());
+                                }
+                                break;
 
-                        // - calcola il tempo medio effettivo di percorrenza
-                        Double mediaTratta = percorrenzaDAO.CalcolaTempoMedio(trattaPercorrenza.getId().toString());
-                        System.out.println("Tempo medio effettivo della tratta: " + mediaTratta);
+                            case 2:
+                                try {
+                                    System.out.println("Fornire id del mezzo:");
+                                    String mezzoId = scanner.nextLine();
 
-                        Double mediaTrattaMezzo = percorrenzaDAO.CalcolaTempoMedioperMEzzo(trattaPercorrenza.getId().toString(), mezzoPercorrenza.getId().toString());
-                        System.out.println("Tempo medio effettivo della tratta per il mezzo: " + mediaTrattaMezzo);
+                                    List<Percorrenza> listapercorrenze2 = percorrenzaDAO.trovaPerMezzo(mezzoId);
 
-                        // - stampa le percorrenze di un mezzo
-                        System.out.println("Percorrenze del mezzo:");
-                        percorrenzaDAO.trovaPerMezzo(mezzoPercorrenza.getId().toString()).forEach(System.out::println);
+                                    System.out.println("lista delle percorrenze trovate");
+                                    listapercorrenze2.forEach(System.out::println);
 
-                        // - stampa le percorrenze di una tratta
-                        System.out.println("Percorrenze della tratta:");
-                        percorrenzaDAO.TrovaTratta(trattaPercorrenza.getId().toString()).forEach(System.out::println);
-                         */
+                                } catch (Exception e) {
+                                    System.out.println("Errore: " + e.getMessage());
+                                }
+                                break;
+
+                            case 3:
+                                try {
+                                    System.out.println("Inserisci data/ora inizio (es: 2026-04-02T08:00):");
+                                    LocalDateTime inizio = LocalDateTime.parse(scanner.nextLine());
+
+                                    System.out.println("Inserisci data/ora fine (es: 2026-04-02T18:00):");
+                                    LocalDateTime fine = LocalDateTime.parse(scanner.nextLine());
+
+                                    List<Percorrenza> lista = percorrenzaDAO.trovaPerPeriodo(inizio, fine);
+
+                                    System.out.println("Perccorenze trovate per perioddo");
+                                    lista.forEach(System.out::println);
+
+                                } catch (Exception e) {
+                                    System.out.println("Errore: " + e.getMessage());
+                                }
+                                break;
+
+                            case 4:
+                                try {
+                                    System.out.println("Fornire id della tratta:");
+                                    String trattaId = scanner.nextLine();
+
+                                    Double media = percorrenzaDAO.CalcolaTempoMedio(trattaId);
+
+                                    System.out.println("Tempo medio della tratta: " + media);
+
+                                } catch (Exception e) {
+                                    System.out.println("Errore: " + e.getMessage());
+                                }
+                                break;
+
+                            case 5:
+                                try {
+                                    System.out.println("Fornire id della tratta:");
+                                    String trattaId = scanner.nextLine();
+
+                                    System.out.println("Fornire id del mezzo:");
+                                    String mezzoId = scanner.nextLine();
+
+                                    Double media = percorrenzaDAO.CalcolaTempoMedioperMEzzo(trattaId, mezzoId);
+
+                                    System.out.println("Tempo medio della tratta per mezzo: " + media);
+
+                                } catch (Exception e) {
+                                    System.out.println("Errore: " + e.getMessage());
+                                }
+                                break;
+
+                            case 6:
+                                try {
+                                    System.out.println("Fornire id della percorrenza:");
+                                    String idPercorrenza = scanner.nextLine();
+                                    Double tempo = percorrenzaDAO.CalcolaTempotraPercorrenze(UUID.fromString(idPercorrenza));
+                                    System.out.println("Tempo calcolato: " + tempo);
+                                } catch (Exception e) {
+                                    System.out.println("Errore: " + e.getMessage());
+                                }
+                                break;
+
+                            default:
+                                System.out.println("Errore....Scelta sbagliata");
+                        }
                         break;
                     case 10:
 

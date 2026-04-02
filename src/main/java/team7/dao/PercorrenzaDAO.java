@@ -40,9 +40,7 @@ public class PercorrenzaDAO {
     // Trova per mezzo
     public List<Percorrenza> trovaPerMezzo(String mezzoId) {
         TypedQuery<Percorrenza> query = em.createQuery("SELECT p FROM Percorrenza p WHERE p.mezzo.id = :mezzoId", Percorrenza.class);
-
         query.setParameter("mezzoId", UUID.fromString(mezzoId));
-
         return query.getResultList();
     }
 // Trova per perioddo
@@ -65,7 +63,7 @@ public class PercorrenzaDAO {
     }
     // calcola tempo tra una percorrenza e l'altra
     public Double CalcolaTempotraPercorrenze(UUID idP) {
-        TypedQuery<Double> query = em.createQuery("SELECT (p.tempoEffettivoPercorrenza - p.dataOraPartenza ) FROM PErcorrenza p WHERE p.id=:id ", Double.class);
+        TypedQuery<Double> query = em.createQuery("SELECT (p.tempoEffettivoPercorrenza - p.dataOraPartenza ) FROM Percorrenza p WHERE p.id=:id ", Double.class);
         query.setParameter("id",idP);
         return query.getSingleResult();
 
