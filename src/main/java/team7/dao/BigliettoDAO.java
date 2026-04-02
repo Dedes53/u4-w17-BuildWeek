@@ -1,6 +1,6 @@
 package team7.dao;
 
-import jakarta.persistence.*;
+import jakarta.persistence.EntityManager;
 import team7.entities.Biglietto;
 import team7.entities.Mezzo;
 import team7.entities.Rivenditore;
@@ -58,5 +58,6 @@ public class BigliettoDAO {
     public List<Biglietto> findByRivenditore(Rivenditore rivenditore) {
         return em.createQuery("SELECT a FROM Biglietto a WHERE a.rivenditore = :r", Biglietto.class).setParameter("r", rivenditore).getResultList();
     }
+
 
 }

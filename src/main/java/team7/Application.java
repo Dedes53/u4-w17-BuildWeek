@@ -8,6 +8,7 @@ import team7.entities.*;
 import team7.enumm.StatoMezzo;
 import team7.enumm.TipoAbbonamento;
 import team7.enumm.TipoMezzo;
+
 import java.util.List;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -64,6 +65,7 @@ public class Application {
         System.out.println("Biglietti dal primo rivenditore");
         System.out.println(b1);
         System.out.println(b2);
+
         System.out.println("Biglitti dal secondo riovenditore");
         System.out.println(b3);
         System.out.println(b4);
@@ -72,6 +74,7 @@ public class Application {
         System.out.println(a1);
         System.out.println(a2);
         System.out.println(a3);
+
         System.out.println("Abbonamenti dal secondo rivenditore");
         System.out.println(a4);
         System.out.println(a5);
@@ -344,11 +347,11 @@ public class Application {
                         break;
                     case 10:
 
-                        int passcode =5432;
+                        int passcode = 5432;
                         System.out.println("Inserisci il passcode:");
                         int pass = scanner.nextInt();
                         scanner.nextLine();
-                        if(passcode != pass){
+                        if (passcode != pass) {
                             System.out.println(" passcode errata! ");
                             break;
                         }

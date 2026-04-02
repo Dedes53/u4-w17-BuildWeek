@@ -12,14 +12,20 @@ public class Tessera {
     @GeneratedValue
     private UUID id;
 
-    @Column(unique = true)
-    private String numero;
-
+    @Column(name = "data_scadenza")
     private LocalDate dataDiScadenza;
 
     @ManyToOne
     private Utente utente;
 
+    //   costruttori
+    protected Tessera() {
+    }
+
+    public Tessera(Utente utente) {
+        this.utente = utente;
+        this.dataDiScadenza = LocalDate.now().plusYears(1);
+    }
 
     public UUID getId() {
         return id;
@@ -27,14 +33,6 @@ public class Tessera {
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public String getNumero() {
-        return numero;
-    }
-
-    public void setNumero(String numero) {
-        this.numero = numero;
     }
 
     public LocalDate getDataDiScadenza() {
