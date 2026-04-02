@@ -37,7 +37,7 @@ public class TrattaDAO {
     return query.getResultList();
      }
 //  elimina per id
-public void cancellaTratta(String id) {
+public Tratta cancellaTratta(String id) {
     EntityTransaction transaction = em.getTransaction();
     try {
         transaction.begin();
@@ -56,13 +56,12 @@ public void cancellaTratta(String id) {
         if (transaction.isActive()) transaction.rollback();
         throw e;
     }
+    return null;
 }
 // questa dovrebbe fa il conteggio delle volte che si percorre una tratta
-//pero cosi conto solo quante righe ci sono..dovrei penso contare con il titolo di viaggio
-    // forse ...SELECT COUNT(t) FROM TitoloVIaggio t WHERE t=:tratta
-    //altimernti come si dicweva con fede fai in percorrenza
+
 public long ContaVolteperTratta(Tratta tratta){
-    TypedQuery<Long> query = em.createQuery("SELECT COUNT(t) FROM Tratta t WHERE t=:tratta", Long.class);
+    TypedQuery<Long> query = em.createQuery("SELECT COUNT(t) FROM Percorrenza p WHERE p.tratta =:tratta", Long.class);
     query.setParameter("tratta",tratta);
     return query.getSingleResult();
 }

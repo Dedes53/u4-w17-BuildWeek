@@ -8,6 +8,7 @@ import team7.entities.*;
 import team7.enumm.StatoMezzo;
 import team7.enumm.TipoAbbonamento;
 import team7.enumm.TipoMezzo;
+import team7.exeption.NonTrovato;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -322,8 +323,53 @@ public class Application {
 
                     case 8:
                         // - TODO dio bono fai i metodi delle tratte
+                        System.out.println("Menu delle Tratte ");
+                        System.out.println("1 Trova tratta per id");
+                        System.out.println("2 Mostra tutte le tratte");
+                        System.out.println("3 Cancella tratta per id ");
+                        System.out.println("4 Conta quante volte quella tratta e' stata percorsa");
 
-
+                        int sceltaTratta = Integer.parseInt(scanner.nextLine());
+                 switch (sceltaTratta){
+                 case 1:
+                 try{
+                  System.out.println("Inserisci id della tratta:");
+                   String idtratta = scanner.nextLine();
+                    Tratta trovato= trattaDAO.trovaPerID(idtratta);
+                     System.out.println(trovato);
+                   }catch(NonTrovato e){
+                    System.out.println("Errore: tratta non trovata!" +e.getMessage());
+                     }
+                   break;
+                  case 2:
+                  List<Tratta> listatratte =trattaDAO.TrovaTutteLeTratte();
+                   System.out.println("--- ELENCO TRATTE ---");
+                  listatratte.forEach(System.out::println);
+                      break;
+                  case 3:
+                    try{
+                   System.out.println("Inserisci id della tratta per cancellarla:");
+                   String idtrattaD = scanner.nextLine();
+                   Tratta trovato= trattaDAO.cancellaTratta(idtrattaD);
+                   System.out.println(trovato);
+                   }catch(NonTrovato e){
+                   System.out.println("Errore: tratta non trovata!" +e.getMessage());
+                   }
+                  break;
+                  case 4:
+                   try {
+                    System.out.println("Inserisci ID tratta da contare:");
+                    String idDaContare = scanner.nextLine();
+                    Tratta trattaDaContare = trattaDAO.trovaPerID(idDaContare);
+                    long count = trattaDAO.ContaVolteperTratta(trattaDaContare);
+                   System.out.println("La tratta " + trattaDaContare.getZonaPartenza() + " - " + trattaDaContare.getZonaFinale() + " è stata percorsa " + count + " volte.");
+                    } catch (NonTrovato e) {
+                  System.out.println("Errore: tratta non trovata!"+ e.getMessage());
+                   }
+                      break;
+                       default:
+                         System.out.println("Errore....Scelta sbagliata");
+                     }
                         break;
                     case 9:
                         // TEST PERCORRENZADAO
