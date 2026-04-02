@@ -23,10 +23,10 @@ public class Utente {
     protected Utente() {
     }
 
-    public Utente(String nome, String cognome, Tessera tessera) {
+    public Utente(String nome, String cognome,) {
         this.nome = nome;
         this.cognome = cognome;
-        this.tessera = tessera;
+       // this.tessera = tessera;
     }
 
 

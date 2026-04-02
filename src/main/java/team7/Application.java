@@ -34,7 +34,7 @@ public class Application {
         //per rivenditore
         RivenditoreDAO rivenditoreDAO = new RivenditoreDAO(em);
         //per utente
-
+        UtenteDAO utenteDAO=new UtenteDAO(em);
         //da qua salviamo utenti, mezzi, tratte, percorrenze
 
 
@@ -77,6 +77,15 @@ public class Application {
         System.out.println(a5);
         System.out.println(a6);
 
+        //Utente crea
+        Utente u1= new Utente("Mario","Rossi");
+        Utente u2= new Utente("Maurizio","Verdi");
+        Utente u3= new Utente("Massimo","Bianchi");
+
+        utenteDAO.save(u1);
+        utenteDAO.save(u2);
+        utenteDAO.save(u3);
+
         try {
             do {
                 System.out.println("MENU ");
@@ -97,8 +106,13 @@ public class Application {
                 switch (scelta) {
                     case 1:
                         // Registrazione
-
-
+                        System.out.println(" Registrazione avviata");
+                        System.out.println("Fornire Nome");
+                        String nome=scanner.nextLine();
+                        System.out.println("Fornire Cognome");
+                        String cognome=scanner.nextLine();
+                        Utente ucrea= new Utente(nome,cognome);
+                        utenteDAO.save(ucrea);
                         break;
 
                     case 2:
