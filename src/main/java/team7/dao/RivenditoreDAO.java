@@ -61,38 +61,62 @@ public class RivenditoreDAO {
         EntityTransaction t = em.getTransaction();
         Biglietto b = new Biglietto(r);
 
-        try {
-            t.begin();
-            Rivenditore rMerge = em.merge(r); // serve per sincronizzare il rivenditore sul db e quello java
-            //  b.setRivenditore(rMerge);  verificare che si incrementi regolarmente già solo quando di istanza il nuovo biglietto
-            em.persist(b);
-            t.commit();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return b;
-    }
-
-    //todo ricerca tessera utente
-    public Abbonamento emettiAbbonamento(Rivenditore r, TipoAbbonamento tipoAbbonamento, Tessera tessera) {
-        // controllo tessera
-        if (tessera.getDataDiScadenza().isBefore(LocalDate.now())) {
-            System.out.println("Impossibile emettere l'abbonamento richiesto. \n" +
-                    "La tessera dell'utente " + tessera.getUtente().getNome() + " " + tessera.getUtente().getCognome() + " è scaduta in data " + tessera.getDataDiScadenza());
-            return null;
-        } else {
-            EntityTransaction t = em.getTransaction();
-            Abbonamento a = new Abbonamento(r, tipoAbbonamento, tessera);
+        // controllo per il distributore automatico
+        if (distributoreAttivo(r)) {
             try {
                 t.begin();
-                em.merge(r);
-                em.persist(a);
+                em.merge(r); // serve per sincronizzare il rivenditore sul db e quello java
+                em.persist(b);
                 t.commit();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
-            return a;
+            return b;
+        } else {
+            System.out.println("Il distributore automatico non è momentaneamente fuori uso");
+            return null;
         }
+    }
+
+    //todo ricerca tessera utente
+    public Abbonamento emettiAbbonamento(Rivenditore r, TipoAbbonamento tipoAbbonamento, Tessera tessera) {
+
+        //controllo il distributore automatico
+        if (distributoreAttivo(r)) {
+
+            // controllo  al scadenza della tessera
+            if (scadenzaTessera(tessera)) {
+                System.out.println("Impossibile emettere l'abbonamento richiesto. \n" +
+                        "La tessera dell'utente " + tessera.getUtente().getNome() + " " + tessera.getUtente().getCognome() + " è scaduta in data " + tessera.getDataDiScadenza());
+                return null;
+            } else {
+                EntityTransaction t = em.getTransaction();
+                Abbonamento a = new Abbonamento(r, tipoAbbonamento, tessera);
+                try {
+                    t.begin();
+                    em.merge(r);
+                    em.persist(a);
+                    t.commit();
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+                return a;
+            }
+
+        } else {
+            System.out.println("Il distributore sutomatico è momentaneamente fuori uso");
+            return null;
+        }
+
+    }
+
+    public Boolean scadenzaTessera(Tessera t) {
+        return t.getDataDiScadenza().isBefore(LocalDate.now());
+    }
+
+    public Boolean distributoreAttivo(Rivenditore r) {
+        if (r instanceof DistributoreAutomatico d) return d.isAttivo();
+        else return true;
     }
 
 
