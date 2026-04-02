@@ -8,6 +8,7 @@ import team7.entities.*;
 import team7.enumm.StatoMezzo;
 import team7.enumm.TipoAbbonamento;
 import team7.enumm.TipoMezzo;
+import team7.exeption.NonTrovato;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,6 +17,10 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
+
+import static java.lang.Integer.parseInt;
+// aggiungere trim() allo scanner...chiedere raffa o fede
 
 public class Application {
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("team7");
@@ -27,7 +32,11 @@ public class Application {
 
     public static void main(String[] args) {
 
-        // DAO mezzi e storico
+        // EntityManagerFactory emf = Persistence.createEntityManagerFactory("team7");
+        EntityManager em = emf.createEntityManager();
+
+
+        //per mezzo
         MezzoDAO mezzoDAO = new MezzoDAO(em);
         PeriodoStatoMezzoDAO periodoDAO = new PeriodoStatoMezzoDAO(em);
 
@@ -38,6 +47,8 @@ public class Application {
         // DAO rivenditori e utenti
 
         UtenteDAO utenteDAO = new UtenteDAO(em);
+        //da qua salviamo utenti, mezzi, tratte, percorrenze
+
 
         Scanner scanner = new Scanner(System.in);
         int scelta;
@@ -101,6 +112,49 @@ public class Application {
         System.out.println(a5);
         System.out.println(a6);
 
+        //tratte
+        Tratta tratta1 = new Tratta("Termini", "Ostia Lido", 28);
+        Tratta tratta2 = new Tratta("Piazza Venezia", "EUR Magliana", 10);
+        Tratta tratta3 = new Tratta("San Pietro", "Colosseo", 5);
+        Tratta tratta4 = new Tratta("Ponte Milvio", "Trastevere", 8);
+        //salviamo
+        trattaDAO.salvaTratta(tratta1);
+        trattaDAO.salvaTratta(tratta2);
+        trattaDAO.salvaTratta(tratta3);
+        trattaDAO.salvaTratta(tratta4);
+        //percorrenze
+        // prima devo creare i mezzi
+        Mezzo mezzo1 = new Mezzo("BUS-CAN-01", TipoMezzo.BUS, StatoMezzo.IN_SERVIZIO, 45);
+        mezzoDAO.save(mezzo1);
+        Mezzo mezzo2 = new Mezzo("BUS-CAN-02", TipoMezzo.BUS, StatoMezzo.IN_SERVIZIO, 20);
+        mezzoDAO.save(mezzo2);
+        Mezzo mezzo3 = new Mezzo("TRAM-MAD-03", TipoMezzo.TRAM, StatoMezzo.IN_SERVIZIO, 120);
+        mezzoDAO.save(mezzo3);
+        Mezzo mezzo4 = new Mezzo("TRAM-MAD-04", TipoMezzo.TRAM, StatoMezzo.IN_SERVIZIO, 200);
+        mezzoDAO.save(mezzo4);
+        Mezzo mezzo5 = new Mezzo("BUS-CAN-05", TipoMezzo.BUS, StatoMezzo.IN_MANUTENZIONE, 40);
+        mezzoDAO.save(mezzo5);
+
+        // - registra una percorrenza di un mezzo su una tratta
+        LocalDateTime datapartenza = LocalDateTime.now();
+        LocalDateTime dataarrivo = datapartenza.plusMinutes(28);
+        //ora vado a inserire i dati nella percorrenza
+        Percorrenza percorrenza1 = new Percorrenza(mezzo1, tratta1, datapartenza, dataarrivo);
+        percorrenzaDAO.salvapERCORRENZA(percorrenza1);
+        //rimetto la tempistica di arrivo per percorrenza2
+         dataarrivo = datapartenza.plusMinutes(10);
+        Percorrenza percorrenza2 = new Percorrenza(mezzo2, tratta2, datapartenza, dataarrivo);
+        percorrenzaDAO.salvapERCORRENZA(percorrenza2);
+        //percorrenza3
+        dataarrivo = datapartenza.plusMinutes(5);
+        Percorrenza percorrenza3 = new Percorrenza(mezzo3, tratta2, datapartenza, dataarrivo);
+        percorrenzaDAO.salvapERCORRENZA(percorrenza3);
+        //percorrenza4
+        dataarrivo = datapartenza.plusMinutes(8);
+        Percorrenza percorrenza4 = new Percorrenza(mezzo4, tratta2, datapartenza, dataarrivo);
+        percorrenzaDAO.salvapERCORRENZA(percorrenza4);
+
+
         try {
             do {
                 System.out.println("\nMENU");
@@ -116,7 +170,7 @@ public class Application {
                 System.out.println("10 Controllo amministratore");
                 System.out.println("0 Esci");
 
-                scelta = leggiIntero(scanner, "Scelta: ");
+                scelta = parseInt(scanner.nextLine());
 
                 switch (scelta) {
                     case 1:
@@ -152,212 +206,168 @@ public class Application {
                         System.out.println("Funzionalità non ancora implementata.");
                         break;
 
-                    /*
-                    VECCHIO CASE 6 - TEST MEZZODAO
-
-                    case 6:
-                        try {
-                            Mezzo bus64 = mezzoDAO.findByCodice("BUS-64");
-                            if (bus64 == null) {
-                                bus64 = new Mezzo("BUS-64", TipoMezzo.BUS, StatoMezzo.IN_SERVIZIO, 80);
-                                mezzoDAO.save(bus64);
-                                System.out.println("Creato: " + bus64);
-                            } else {
-                                System.out.println("BUS-64 esiste già:");
-                                System.out.println(bus64);
-                            }
-
-                            Mezzo tram12 = mezzoDAO.findByCodice("TRAM-12");
-                            if (tram12 == null) {
-                                tram12 = new Mezzo("TRAM-12", TipoMezzo.TRAM, StatoMezzo.IN_SERVIZIO, 120);
-                                mezzoDAO.save(tram12);
-                                System.out.println("Creato: " + tram12);
-                            } else {
-                                System.out.println("TRAM-12 esiste già:");
-                                System.out.println(tram12);
-                            }
-
-                            Mezzo bus78 = mezzoDAO.findByCodice("BUS-78");
-                            if (bus78 == null) {
-                                bus78 = new Mezzo("BUS-78", TipoMezzo.BUS, StatoMezzo.IN_MANUTENZIONE, 50);
-                                mezzoDAO.save(bus78);
-                                System.out.println("Creato: " + bus78);
-                            } else {
-                                System.out.println("BUS-78 esiste già:");
-                                System.out.println(bus78);
-                            }
-
-                            List<PeriodoStatoMezzo> storicoBus64 = periodoDAO.trovaStoricoPerMezzo(bus64.getId().toString());
-
-                            if (storicoBus64.size() == 1) {
-                                LocalDate dataInizioPrimoPeriodo = storicoBus64.get(0).getDataInizio();
-                                LocalDate dataInizioManutenzione = dataInizioPrimoPeriodo.plusDays(2);
-                                LocalDate dataRitornoServizio = dataInizioPrimoPeriodo.plusDays(4);
-
-                                mezzoDAO.cambiaStato(
-                                        bus64.getId().toString(),
-                                        StatoMezzo.IN_MANUTENZIONE,
-                                        dataInizioManutenzione
-                                );
-
-                                mezzoDAO.cambiaStato(
-                                        bus64.getId().toString(),
-                                        StatoMezzo.IN_SERVIZIO,
-                                        dataRitornoServizio
-                                );
-
-                                System.out.println("Storico BUS-64 aggiornato con un periodo di manutenzione.");
-                            }
-
-                            Tratta trattaTest;
-                            List<Tratta> tratte = trattaDAO.TrovaTutteLeTratte();
-
-                            if (tratte.isEmpty()) {
-                                trattaTest = new Tratta("Deposito", "Centro", 30);
-                                trattaDAO.salvaTratta(trattaTest);
-                                System.out.println("Creata tratta di test: " + trattaTest);
-                            } else {
-                                trattaTest = tratte.get(0);
-                                System.out.println("Uso tratta già esistente: " + trattaTest);
-                            }
-
-                            LocalDateTime partenzaTest = LocalDateTime.now();
-                            Percorrenza percorrenzaTest = new Percorrenza(
-                                    bus64,
-                                    trattaTest,
-                                    partenzaTest,
-                                    partenzaTest.plusMinutes(35)
-                            );
-                            percorrenzaDAO.salvapERCORRENZA(percorrenzaTest);
-
-                            System.out.println("BUS-64 assegnato alla tratta tramite percorrenza:");
-                            System.out.println(percorrenzaTest);
-
-                            System.out.println("Mezzi di tipo BUS:");
-                            mezzoDAO.findByTipo(TipoMezzo.BUS).forEach(System.out::println);
-
-                            System.out.println("Mezzi in manutenzione:");
-                            mezzoDAO.findByStato(StatoMezzo.IN_MANUTENZIONE).forEach(System.out::println);
-
-                        } catch (Exception e) {
-                            System.out.println("Errore: " + e.getMessage());
-                            e.printStackTrace();
-                        }
-                        break;
-                    */
                     case 6:
                         menuGestioneMezzi(scanner, mezzoDAO, trattaDAO, percorrenzaDAO);
                         break;
 
-                    /*
-                    VECCHIO CASE 7 - TEST PERIODOSTATOMEZZODAO
-
-                    case 7:
-                        try {
-                            System.out.println("STORICO MEZZO");
-
-                            Mezzo mezzoTest = mezzoDAO.findByCodice("BUS-64");
-
-                            if (mezzoTest == null) {
-                                System.out.println("Mezzo BUS-64 non trovato. Esegui prima il case 6.");
-                                break;
-                            }
-
-                            System.out.println("Mezzo trovato:");
-                            System.out.println(mezzoTest);
-
-                            System.out.println("Storico completo del mezzo:");
-                            periodoDAO.trovaStoricoPerMezzo(mezzoTest.getId().toString())
-                                    .forEach(System.out::println);
-
-                            List<PeriodoStatoMezzo> manutenzioni = periodoDAO.trovaManutenzioniPerMezzo(mezzoTest.getId().toString());
-
-                            System.out.println("Periodi di manutenzione:");
-                            if (manutenzioni.isEmpty()) {
-                                System.out.println("Nessun periodo di manutenzione trovato.");
-                            } else {
-                                manutenzioni.forEach(System.out::println);
-                            }
-
-                            System.out.println("Periodo attivo attuale:");
-                            System.out.println(periodoDAO.trovaPeriodoAttivoPerMezzo(mezzoTest.getId().toString()));
-
-                        } catch (Exception e) {
-                            System.out.println("Errore: " + e.getMessage());
-                            e.printStackTrace();
-                        }
-                        break;
-                    */
                     case 7:
                         menuStoricoMezzi(scanner, mezzoDAO, periodoDAO);
                         break;
 
                     case 8:
-                        Tratta trattaTest = new Tratta("Centro", "Stazione", 45);
-                        trattaDAO.salvaTratta(trattaTest);
-                        System.out.println("Tratta salvata:");
-                        System.out.println("ID: " + trattaTest.getId());
-                        System.out.println("Partenza: " + trattaTest.getZonaPartenza());
-                        System.out.println("Arrivo: " + trattaTest.getZonaFinale());
-                        System.out.println("Durata: " + trattaTest.getTempoPercorrenzaFormattato());
+                        System.out.println("Menu delle Tratte ");
+                        System.out.println("1 Trova tratta per id");
+                        System.out.println("2 Mostra tutte le tratte");
+                        System.out.println("3 Cancella tratta per id ");
+                        System.out.println("4 Conta quante volte quella tratta e' stata percorsa");
 
-                        Tratta trattaTrovata = trattaDAO.trovaPerID(trattaTest.getId().toString());
-                        System.out.println("Tratta trovata per ID:");
-                        System.out.println("ID: " + trattaTrovata.getId());
-                        System.out.println("Partenza: " + trattaTrovata.getZonaPartenza());
-                        System.out.println("Arrivo: " + trattaTrovata.getZonaFinale());
-                        System.out.println("Durata: " + trattaTrovata.getTempoPercorrenzaFormattato());
-
-                        System.out.println("Tutte le tratte:");
-                        trattaDAO.TrovaTutteLeTratte().forEach(t ->
-                                System.out.println(t.getId() + " - " + t.getZonaPartenza() + " -> " + t.getZonaFinale() + " - " + t.getTempoPercorrenzaFormattato()));
+                        int sceltaTratta = parseInt(scanner.nextLine());
+                 switch (sceltaTratta){
+                 case 1:
+                 try{
+                  System.out.println("Inserisci id della tratta:");
+                   String idtratta = scanner.nextLine();
+                    Tratta trovato= trattaDAO.trovaPerID(idtratta);
+                     System.out.println(trovato);
+                   }catch(NonTrovato e){
+                    System.out.println("Errore: tratta non trovata!" +e.getMessage());
+                     }
+                   break;
+                  case 2:
+                  List<Tratta> listatratte =trattaDAO.TrovaTutteLeTratte();
+                   System.out.println("--- ELENCO TRATTE ---");
+                  listatratte.forEach(System.out::println);
+                      break;
+                  case 3:
+                    try{
+                   System.out.println("Inserisci id della tratta per cancellarla:");
+                   String idtrattaD = scanner.nextLine();
+                   Tratta trovato= trattaDAO.cancellaTratta(idtrattaD);
+                   System.out.println(trovato);
+                   }catch(NonTrovato e){
+                   System.out.println("Errore: tratta non trovata!" +e.getMessage());
+                   }
+                  break;
+                  case 4:
+                   try {
+                    System.out.println("Inserisci ID tratta da contare:");
+                    String idDaContare = scanner.nextLine();
+                    Tratta trattaDaContare = trattaDAO.trovaPerID(idDaContare);
+                    long count = trattaDAO.ContaVolteperTratta(trattaDaContare);
+                   System.out.println("La tratta " + trattaDaContare.getZonaPartenza() + " - " + trattaDaContare.getZonaFinale() + " è stata percorsa " + count + " volte.");
+                    } catch (NonTrovato e) {
+                  System.out.println("Errore: tratta non trovata!"+ e.getMessage());
+                   }
+                      break;
+                       default:
+                         System.out.println("Errore....Scelta sbagliata");
+                     }
                         break;
-
                     case 9:
-                        Tratta trattaPercorrenza = new Tratta("Deposito", "Capolinea Nord", 35);
-                        trattaDAO.salvaTratta(trattaPercorrenza);
+                        System.out.println("Menu delle Percorrenze ");
+                        System.out.println("1 Trova percorrenze per tratta  ");
+                        System.out.println("2 Trova percorrenze per mezzo");
+                        System.out.println("3 Trova percorrenze per periodo");
+                        System.out.println("4 Calcola tempo medio per tratta");
+                        System.out.println("5 Calcola tempo medio per tratta e mezzo");
+                        System.out.println("6 Calcola tempo tra percorrenze");
 
-                        Mezzo mezzoPercorrenza = new Mezzo("BUS-PERC-01", TipoMezzo.BUS, StatoMezzo.IN_SERVIZIO, 85);
-                        mezzoDAO.save(mezzoPercorrenza);
+                        int sceltaPercorrenza = parseInt(scanner.nextLine());
 
-                        LocalDateTime dataPartenza = LocalDateTime.now();
-                        LocalDateTime dataArrivo = dataPartenza.plusMinutes(42);
+                        switch (sceltaPercorrenza) {
+                            case 1:
+                                try {
+                                    System.out.println("Fornire id della tratta:");
+                                    String trattaId = scanner.nextLine();
 
-                        Percorrenza percorrenzaTest = new Percorrenza(mezzoPercorrenza, trattaPercorrenza, dataPartenza, dataArrivo);
+                                    List<Percorrenza> listapercorrenze = percorrenzaDAO.TrovaTratta(trattaId);
+                                    System.out.println("lista delle percorrenze trovate");
+                                    listapercorrenze.forEach(System.out::println);
 
-                        percorrenzaDAO.salvapERCORRENZA(percorrenzaTest);
-                        System.out.println("Percorrenza salvata:");
-                        System.out.println("ID: " + percorrenzaTest.getId());
-                        System.out.println("Mezzo: " + percorrenzaTest.getMezzo().getId());
-                        System.out.println("Tratta: " + percorrenzaTest.getTratta().getId());
-                        System.out.println("Partenza: " + percorrenzaTest.getDataOraPartenza());
-                        System.out.println("Arrivo: " + percorrenzaTest.getDataOraArrivo());
-                        System.out.println("Tempo effettivo: " + percorrenzaTest.getTempoEffettivoPercorrenza().toMinutes() + " minuti");
-                        System.out.println("Scostamento: " + percorrenzaTest.getScostamentoRispettoAlPrevisto());
+                                } catch (Exception e) {
+                                    System.out.println("Errore: " + e.getMessage());
+                                }
+                                break;
 
-                        System.out.println("Tempo effettivo registrato correttamente.");
+                            case 2:
+                                try {
+                                    System.out.println("Fornire id del mezzo:");
+                                    String mezzoId = scanner.nextLine();
 
-                        int numeroPercorrenze = percorrenzaDAO
-                                .trovaPerMezzo(mezzoPercorrenza.getId().toString())
-                                .size();
-                        System.out.println("Numero percorrenze del mezzo: " + numeroPercorrenze);
+                                    List<Percorrenza> listapercorrenze2 = percorrenzaDAO.trovaPerMezzo(mezzoId);
 
-                        Double mediaTratta = percorrenzaDAO.CalcolaTempoMedio(trattaPercorrenza.getId().toString());
-                        System.out.println("Tempo medio effettivo della tratta: " + mediaTratta);
+                                    System.out.println("lista delle percorrenze trovate");
+                                    listapercorrenze2.forEach(System.out::println);
 
-                        Double mediaTrattaMezzo = percorrenzaDAO.CalcolaTempoMedioperMEzzo(
-                                trattaPercorrenza.getId().toString(),
-                                mezzoPercorrenza.getId().toString()
-                        );
-                        System.out.println("Tempo medio effettivo della tratta per il mezzo: " + mediaTrattaMezzo);
+                                } catch (Exception e) {
+                                    System.out.println("Errore: " + e.getMessage());
+                                }
+                                break;
 
-                        System.out.println("Percorrenze del mezzo:");
-                        percorrenzaDAO.trovaPerMezzo(mezzoPercorrenza.getId().toString()).forEach(System.out::println);
+                            case 3:
+                                try {
+                                    System.out.println("Inserisci data/ora inizio (es: 2026-04-02T08:00):");
+                                    LocalDateTime inizio = LocalDateTime.parse(scanner.nextLine());
 
-                        System.out.println("Percorrenze della tratta:");
-                        percorrenzaDAO.TrovaTratta(trattaPercorrenza.getId().toString()).forEach(System.out::println);
+                                    System.out.println("Inserisci data/ora fine (es: 2026-04-02T18:00):");
+                                    LocalDateTime fine = LocalDateTime.parse(scanner.nextLine());
+
+                                    List<Percorrenza> lista = percorrenzaDAO.trovaPerPeriodo(inizio, fine);
+
+                                    System.out.println("Perccorenze trovate per perioddo");
+                                    lista.forEach(System.out::println);
+
+                                } catch (Exception e) {
+                                    System.out.println("Errore: " + e.getMessage());
+                                }
+                                break;
+
+                            case 4:
+                                try {
+                                    System.out.println("Fornire id della tratta:");
+                                    String trattaId = scanner.nextLine();
+
+                                    Double media = percorrenzaDAO.CalcolaTempoMedio(trattaId);
+
+                                    System.out.println("Tempo medio della tratta: " + media);
+
+                                } catch (Exception e) {
+                                    System.out.println("Errore: " + e.getMessage());
+                                }
+                                break;
+
+                            case 5:
+                                try {
+                                    System.out.println("Fornire id della tratta:");
+                                    String trattaId = scanner.nextLine();
+
+                                    System.out.println("Fornire id del mezzo:");
+                                    String mezzoId = scanner.nextLine();
+
+                                    Double media = percorrenzaDAO.CalcolaTempoMedioperMEzzo(trattaId, mezzoId);
+
+                                    System.out.println("Tempo medio della tratta per mezzo: " + media);
+
+                                } catch (Exception e) {
+                                    System.out.println("Errore: " + e.getMessage());
+                                }
+                                break;
+
+                            case 6:
+                                try {
+                                    System.out.println("Fornire id della percorrenza:");
+                                    String idPercorrenza = scanner.nextLine();
+                                    Double tempo = percorrenzaDAO.CalcolaTempotraPercorrenze(UUID.fromString(idPercorrenza));
+                                    System.out.println("Tempo calcolato: " + tempo);
+                                } catch (Exception e) {
+                                    System.out.println("Errore: " + e.getMessage());
+                                }
+                                break;
+
+                            default:
+                                System.out.println("Errore....Scelta sbagliata");
+                        }
                         break;
-
                     case 10:
                         int passcode = 5432;
                         int pass = leggiIntero(scanner, "Inserisci il passcode: ");
