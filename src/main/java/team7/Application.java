@@ -23,6 +23,7 @@ public class Application {
     private static final List<Rivenditore> rivenditori = new ArrayList<>();
     static EntityManager em = emf.createEntityManager();
     static RivenditoreDAO rivenditoreDAO = new RivenditoreDAO(em);
+    static Utente u3 = new Utente("Massimo", "Bianchi"); // per test metodo crea abbonamento
 
     public static void main(String[] args) {
 
@@ -44,7 +45,7 @@ public class Application {
         // Dati di test già presenti nel progetto
         Utente u1 = new Utente("Mario", "Rossi");
         Utente u2 = new Utente("Maurizio", "Verdi");
-        Utente u3 = new Utente("Massimo", "Bianchi");
+
 
         utenteDAO.save(u1);
         utenteDAO.save(u2);
@@ -138,8 +139,7 @@ public class Application {
 
                     case 3:
                         // Compra Abbonamento
-                        // se la tessera è scaduta, dire di rinnovarla
-                        System.out.println("Funzionalità non ancora implementata.");
+                        compraAbbonamento();
                         break;
 
                     case 4:
@@ -881,6 +881,8 @@ public class Application {
 
     static void compraBiglietto() {
         Scanner s = new Scanner(System.in);
+        //potrei sostituirlo con un metodo selRivenditore()
+        System.out.println("Seleziona uno dei seguenti rivenditori:");
         for (int i = 0; i < rivenditori.size(); i++) {
             System.out.println((i + 1) + " - " + rivenditori.get(i).getNomeAttivita() + "\n");
         }
@@ -890,6 +892,48 @@ public class Application {
             compraBiglietto();
         }
         Rivenditore r = rivenditori.get(riv - 1);
-        rivenditoreDAO.emettiBiglietto(r);
+        Biglietto b = rivenditoreDAO.emettiBiglietto(r);
+        System.out.println("Biglietto acquistato con successo");
+    }
+
+    static void compraAbbonamento() {
+        Scanner s = new Scanner(System.in);
+        System.out.println("Seleziona uno dei seguenti rivenditori:");
+        //scelta del rivenditore
+        for (int i = 0; i < rivenditori.size(); i++) {
+            System.out.println((i + 1) + " - " + rivenditori.get(i).getNomeAttivita() + "\n");
+        }
+        int riv = s.nextInt();
+        if (riv < 1 || riv > rivenditori.size()) {
+            System.out.println("Valore inserito non riconosciuto, si prega di riprovare");
+            compraAbbonamento();
+        }
+        Rivenditore r = rivenditori.get(riv - 1);
+        TipoAbbonamento durata = sceltaDurata();
+        //tessera utente
+        Tessera t = new Tessera(u3);
+        Abbonamento a = rivenditoreDAO.emettiAbbonamento(r, durata, t);
+        System.out.println("Ecco i dati del tuo abbonamento: " + a);
+    }
+
+    static TipoAbbonamento sceltaDurata() {
+        Scanner s = new Scanner(System.in);
+        // scelta del tipo di abbonamento
+        System.out.println("Ora devi selezionare la durata desiderata del tuo abbonamento:\n" +
+                "1 - SETTIMANALE\n" +
+                "2 - MENSILE\n" +
+                "3 - ANNUALE");
+        int res = s.nextInt();
+        TipoAbbonamento durata = switch (res) {
+            case 1 -> TipoAbbonamento.SETTIMANALE;
+            case 2 -> TipoAbbonamento.MENSILE;
+            case 3 -> TipoAbbonamento.ANNUALE;
+            default -> null;
+        };
+        if (durata == null) {
+            System.out.println("Scelta non valida, seleziona una delle scelte da 1 a 3");
+            compraAbbonamento();
+        }
+        return durata;
     }
 }
