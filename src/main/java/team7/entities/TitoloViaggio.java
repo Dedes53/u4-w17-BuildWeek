@@ -27,10 +27,9 @@ public abstract class TitoloViaggio {
     protected TitoloViaggio() {
     }
 
-    public TitoloViaggio(String codiceUnivoco, LocalDate dataEmissione, Rivenditore rivenditore) {
-        this.codiceUnivoco = codiceUnivoco;
-        this.dataEmissione = dataEmissione;
-        this.rivenditore = rivenditore;
+    public TitoloViaggio(Rivenditore r) {
+        //   richiama setta i parametri della vendita: data, rivenditore e richiama un metodo che genera il codiceUnivoco basato sull'uuid del rivenditore selezionato
+        this.setRivenditore(r);
     }
 
 
@@ -71,8 +70,7 @@ public abstract class TitoloViaggio {
 
     @Override
     public String toString() {
-        return "TitoloViaggio{" +
-                "id=" + id +
+        return "id=" + id +
                 ", codiceUnivoco='" + codiceUnivoco + '\'' +
                 ", dataEmissione=" + dataEmissione +
                 ", rivenditore=" + rivenditore +

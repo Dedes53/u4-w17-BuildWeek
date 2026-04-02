@@ -6,10 +6,12 @@ import jakarta.persistence.Persistence;
 import team7.dao.*;
 import team7.entities.*;
 import team7.enumm.StatoMezzo;
+import team7.enumm.TipoAbbonamento;
 import team7.enumm.TipoMezzo;
-import java.util.List;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Scanner;
 
 public class Application {
@@ -19,6 +21,7 @@ public class Application {
 
         // EntityManagerFactory emf = Persistence.createEntityManagerFactory("team7");
         EntityManager em = emf.createEntityManager();
+
 
         //per mezzo
         MezzoDAO mezzoDAO = new MezzoDAO(em);
@@ -36,6 +39,42 @@ public class Application {
 
         Scanner scanner = new Scanner(System.in);
         int scelta;
+
+
+//        TEST PER EMISSIONE BIGLIETTO
+        Rivenditore r1 = new RivenditoreAutorizzato("Bar Roma");
+        Rivenditore r2 = new RivenditoreAutorizzato("Bar Coop");
+
+        rivenditoreDAO.save(r1);
+        rivenditoreDAO.save(r2);
+
+        Biglietto b1 = rivenditoreDAO.emettiBiglietto(r1);
+        Biglietto b2 = rivenditoreDAO.emettiBiglietto(r1);
+        Biglietto b3 = rivenditoreDAO.emettiBiglietto(r2);
+        Biglietto b4 = rivenditoreDAO.emettiBiglietto(r2);
+
+        Abbonamento a1 = rivenditoreDAO.emettiAbbonamento(r1, TipoAbbonamento.ANNUALE);
+        Abbonamento a2 = rivenditoreDAO.emettiAbbonamento(r1, TipoAbbonamento.MENSILE);
+        Abbonamento a3 = rivenditoreDAO.emettiAbbonamento(r1, TipoAbbonamento.SETTIMANALE);
+        Abbonamento a4 = rivenditoreDAO.emettiAbbonamento(r2, TipoAbbonamento.ANNUALE);
+        Abbonamento a5 = rivenditoreDAO.emettiAbbonamento(r2, TipoAbbonamento.MENSILE);
+        Abbonamento a6 = rivenditoreDAO.emettiAbbonamento(r2, TipoAbbonamento.SETTIMANALE);
+
+        System.out.println("Biglietti dal primo rivenditore");
+        System.out.println(b1);
+        System.out.println(b2);
+        System.out.println("Biglitti dal secondo riovenditore");
+        System.out.println(b3);
+        System.out.println(b4);
+
+        System.out.println("Abbonamenti dal primo rivenditore");
+        System.out.println(a1);
+        System.out.println(a2);
+        System.out.println(a3);
+        System.out.println("Abbonamenti dal secondo rivenditore");
+        System.out.println(a4);
+        System.out.println(a5);
+        System.out.println(a6);
 
         try {
             do {

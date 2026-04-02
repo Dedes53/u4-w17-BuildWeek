@@ -25,12 +25,22 @@ public class Abbonamento extends TitoloViaggio {
     protected Abbonamento() {
     }
 
-    public Abbonamento(String codiceUnivoco, LocalDate dataEmissione, Rivenditore rivenditore, TipoAbbonamento tipo, LocalDate dataInizio, LocalDate dataFine, Tessera tessera) {
-        super(codiceUnivoco, dataEmissione, rivenditore);
+    public Abbonamento(Rivenditore rivenditore, TipoAbbonamento tipo) {
+        super(rivenditore);
         this.tipo = tipo;
-        this.dataInizio = dataInizio;
-        this.dataFine = dataFine;
-        this.tessera = tessera;
+        this.dataInizio = LocalDate.now();
+        switch (tipo) {
+            case SETTIMANALE:
+                this.dataFine = dataInizio.plusWeeks(1);
+                break;
+            case MENSILE:
+                this.dataFine = dataInizio.plusMonths(1);
+                break;
+            case ANNUALE:
+                this.dataFine = dataInizio.plusYears(1);
+                break;
+        }
+//        this.tessera = tessera;
     }
 
 
@@ -70,6 +80,7 @@ public class Abbonamento extends TitoloViaggio {
     @Override
     public String toString() {
         return "Abbonamento{" +
+                super.toString() +
                 "tipo=" + tipo +
                 ", dataInizio=" + dataInizio +
                 ", dataFine=" + dataFine +

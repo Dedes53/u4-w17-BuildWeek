@@ -3,7 +3,6 @@ package team7.entities;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,14 +20,11 @@ public class Biglietto extends TitoloViaggio {
     protected Biglietto() {
     }
 
-    public Biglietto(String codiceUnivoco, LocalDate dataEmissione, Rivenditore rivenditore, boolean vidimato, Mezzo mezzoVidimazione, LocalDateTime dataDiVidimazione) {
-        super(codiceUnivoco, dataEmissione, rivenditore);
-        this.vidimato = vidimato;
-        this.mezzoVidimazione = mezzoVidimazione;
-        this.dataDiVidimazione = dataDiVidimazione;
+    public Biglietto(Rivenditore rivenditore) {
+        super(rivenditore);
     }
 
-    
+
     //    getters/setters
     public boolean isVidimato() {
         return vidimato;
@@ -52,5 +48,15 @@ public class Biglietto extends TitoloViaggio {
 
     public void setMezzoVidimazione(Mezzo mezzoVidimazione) {
         this.mezzoVidimazione = mezzoVidimazione;
+    }
+
+    @Override
+    public String toString() {
+        return "Biglietto{" +
+                super.toString() +
+                "vidimato=" + vidimato +
+                ", mezzoVidimazione=" + mezzoVidimazione +
+                ", dataDiVidimazione=" + dataDiVidimazione +
+                '}';
     }
 }
