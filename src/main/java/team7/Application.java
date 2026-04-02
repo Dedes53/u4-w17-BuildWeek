@@ -11,9 +11,9 @@ import team7.enumm.TipoMezzo;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,9 +21,10 @@ public class Application {
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("team7");
 
     private static final List<Rivenditore> rivenditori = new ArrayList<>();
+    static EntityManager em = emf.createEntityManager();
+    static RivenditoreDAO rivenditoreDAO = new RivenditoreDAO(em);
 
     public static void main(String[] args) {
-        EntityManager em = emf.createEntityManager();
 
         // DAO mezzi e storico
         MezzoDAO mezzoDAO = new MezzoDAO(em);
@@ -34,7 +35,7 @@ public class Application {
         PercorrenzaDAO percorrenzaDAO = new PercorrenzaDAO(em);
 
         // DAO rivenditori e utenti
-        RivenditoreDAO rivenditoreDAO = new RivenditoreDAO(em);
+
         UtenteDAO utenteDAO = new UtenteDAO(em);
 
         Scanner scanner = new Scanner(System.in);
@@ -131,29 +132,7 @@ public class Application {
 
                     case 2:
                         // Emissione biglietti da rivenditore
-                        System.out.println("Funzionalità non ancora implementata.");
-                        // compraBiglietto
-                        Scanner s = new Scanner(System.in);
-
-                        System.out.println("Per procedere all'acquisto di un biglietto selezionare prima il rivenditore:\n" +
-                                "1 - Bar Coop\n" +
-                                "2 - Bar Roma\n" +
-                                "3 - Automatico Bar Arcobaleno\n" +
-                                "4 - Automatico Stazione FS\n" +
-                                "5 - Indietro");
-
-                        int riv = s.nextInt();
-                        Rivenditore r = switch (riv) {
-                            case 1 -> r1;
-                            case 2 -> r2;
-                            case 3 -> r3;
-                            case 4 -> r4;
-                            case 5 -> r1; //trovare il modod di tornare indietro
-                            default -> null;
-                        };
-                        if (r == null) System.out.println("Valore inserito non riconosciuto, si prega di riprovare");
-
-
+                        compraBiglietto();
                         break;
 
 
@@ -630,8 +609,8 @@ public class Application {
 
             System.out.print("Inserisci nome attività: ");
             String nome = scanner.nextLine().trim();
-                                            System.out.println("Inserisci nome attività:");
-                                            nome = scanner.nextLine();
+            System.out.println("Inserisci nome attività:");
+            nome = scanner.nextLine();
 
             if (sceltaRiv == 1) {
                 RivenditoreAutorizzato riv = new RivenditoreAutorizzato(nome);
@@ -902,20 +881,15 @@ public class Application {
 
     static void compraBiglietto() {
         Scanner s = new Scanner(System.in);
-
         for (int i = 0; i < rivenditori.size(); i++) {
-            System.out.println((i + 1) + " - " + rivenditori.get(i).getNomeAttivita());
+            System.out.println((i + 1) + " - " + rivenditori.get(i).getNomeAttivita() + "\n");
         }
         int riv = s.nextInt();
-        Rivenditore r = switch (riv) {
-            case 1 -> rivenditori.get(riv - 1);
-            case 2 -> r2;
-            case 3 -> r3;
-            case 4 -> r4;
-            case 5 -> r1; //trovare il modod di tornare indietro
-            default -> null;
-        };
-        if (r == null) System.out.println("Valore inserito non riconosciuto, si prega di riprovare");
+        if (riv < 1 || riv > rivenditori.size()) {
+            System.out.println("Valore inserito non riconosciuto, si prega di riprovare");
+            compraBiglietto();
+        }
+        Rivenditore r = rivenditori.get(riv - 1);
+        rivenditoreDAO.emettiBiglietto(r);
     }
-
 }
