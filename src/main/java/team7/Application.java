@@ -56,7 +56,7 @@ public class Application {
         t2.setDataDiScadenza(LocalDate.of(2025, 10, 14));
         utenteDAO.saveTessera(t2);
 
-        //        TEST PER EMISSIONE BIGLIETTO
+        //         EMISSIONE BIGLIETTO
         Rivenditore r1 = new RivenditoreAutorizzato("Bar Roma");
         Rivenditore r2 = new RivenditoreAutorizzato("Bar Coop");
 
@@ -93,6 +93,48 @@ public class Application {
         System.out.println(a5);
         System.out.println(a6);
 
+        //tratte
+        Tratta tratta1 = new Tratta("Termini", "Ostia Lido", 28);
+        Tratta tratta2 = new Tratta("Piazza Venezia", "EUR Magliana", 10);
+        Tratta tratta3 = new Tratta("San Pietro", "Colosseo", 5);
+        Tratta tratta4 = new Tratta("Ponte Milvio", "Trastevere", 8);
+        //salviamo
+        trattaDAO.salvaTratta(tratta1);
+        trattaDAO.salvaTratta(tratta2);
+        trattaDAO.salvaTratta(tratta3);
+        trattaDAO.salvaTratta(tratta4);
+        //percorrenze
+        // prima devo creare i mezzi
+        Mezzo mezzo1 = new Mezzo("BUS-CAN-01", TipoMezzo.BUS, StatoMezzo.IN_SERVIZIO, 45);
+        mezzoDAO.save(mezzo1);
+        Mezzo mezzo2 = new Mezzo("BUS-CAN-02", TipoMezzo.BUS, StatoMezzo.IN_SERVIZIO, 20);
+        mezzoDAO.save(mezzo1);
+        Mezzo mezzo3 = new Mezzo("TRAM-MAD-03", TipoMezzo.TRAM, StatoMezzo.IN_SERVIZIO, 120);
+        mezzoDAO.save(mezzo1);
+        Mezzo mezzo4 = new Mezzo("BUS-MAD-04", TipoMezzo.TRAM, StatoMezzo.IN_SERVIZIO, 200);
+        mezzoDAO.save(mezzo1);
+        Mezzo mezzo5 = new Mezzo("BUS-CAN-05", TipoMezzo.BUS, StatoMezzo.IN_MANUTENZIONE, 40);
+        mezzoDAO.save(mezzo1);
+
+        // - registra una percorrenza di un mezzo su una tratta
+        LocalDateTime datapartenza = LocalDateTime.now();
+        LocalDateTime dataarrivo = datapartenza.plusMinutes(28);
+        //ora vado a inserire i dati nella percorrenza
+        Percorrenza percorrenza1 = new Percorrenza(mezzo1, tratta1, datapartenza, dataarrivo);
+        percorrenzaDAO.salvapERCORRENZA(percorrenza1);
+        //rimetto la tempistica di arrivo per percorrenza2
+         dataarrivo = datapartenza.plusMinutes(10);
+        Percorrenza percorrenza2 = new Percorrenza(mezzo2, tratta2, datapartenza, dataarrivo);
+        percorrenzaDAO.salvapERCORRENZA(percorrenza2);
+        //percorrenza3
+        dataarrivo = datapartenza.plusMinutes(5);
+        Percorrenza percorrenza3 = new Percorrenza(mezzo3, tratta2, datapartenza, dataarrivo);
+        percorrenzaDAO.salvapERCORRENZA(percorrenza3);
+        //percorrenza4
+        dataarrivo = datapartenza.plusMinutes(8);
+        Percorrenza percorrenza4 = new Percorrenza(mezzo4, tratta2, datapartenza, dataarrivo);
+        percorrenzaDAO.salvapERCORRENZA(percorrenza4);
+
 
         try {
             do {
@@ -104,8 +146,8 @@ public class Application {
                 System.out.println("5 Rivenditore");
                 System.out.println("6 Test MezzoDAO");
                 System.out.println("7 Test PeriodoStatoMezzoDAO");
-                System.out.println("8 Test TrattaDAO");
-                System.out.println("9 Test PercorrenzaDAO");
+                System.out.println("8 Vedi Tratta");
+                System.out.println("9 Vedi Percorrenza");
                 System.out.println("10 Controllo amministratore");
                 System.out.println("0 Esci");
 
@@ -279,27 +321,8 @@ public class Application {
                         break;
 
                     case 8:
-                        // - crea una tratta
-                        Tratta trattaTest = new Tratta("Centro", "Stazione", 45);
-                        trattaDAO.salvaTratta(trattaTest);
-                        System.out.println("Tratta salvata:");
-                        System.out.println("ID: " + trattaTest.getId());
-                        System.out.println("Partenza: " + trattaTest.getZonaPartenza());
-                        System.out.println("Arrivo: " + trattaTest.getZonaFinale());
-                        System.out.println("Durata: " + trattaTest.getTempoPercorrenzaFormattato());
+                        // - TODO dio bono fai i metodi delle tratte
 
-                        // - cerca tratta per id
-                        Tratta trattaTrovata = trattaDAO.trovaPerID(trattaTest.getId().toString());
-                        System.out.println("Tratta trovata per ID:");
-                        System.out.println("ID: " + trattaTrovata.getId());
-                        System.out.println("Partenza: " + trattaTrovata.getZonaPartenza());
-                        System.out.println("Arrivo: " + trattaTrovata.getZonaFinale());
-                        System.out.println("Durata: " + trattaTrovata.getTempoPercorrenzaFormattato());
-
-                        // - stampa tutte le tratte
-                        System.out.println("Tutte le tratte:");
-                        trattaDAO.TrovaTutteLeTratte().forEach(t ->
-                                System.out.println(t.getId() + " - " + t.getZonaPartenza() + " -> " + t.getZonaFinale() + " - " + t.getTempoPercorrenzaFormattato()));
                         break;
                     case 9:
                         // TEST PERCORRENZADAO
@@ -323,9 +346,15 @@ public class Application {
                         LocalDateTime datapartenza = LocalDateTime.now();
                         LocalDateTime dataarrivo = datapartenza.plusMinutes(42);
 
-                        Percorrenza percorrenzaTest = new Percorrenza(mezzoPercorrenza, trattaPercorrenza, datapartenza, dataarrivo);
 
+
+                        // - TODO fai percorrenze
+                        Percorrenza percorrenzaTest = new Percorrenza(mezzoPercorrenza, trattaPercorrenza, datapartenza, dataarrivo);
                         percorrenzaDAO.salvapERCORRENZA(percorrenzaTest);
+
+
+
+
                         System.out.println("Percorrenza salvata:");
                         System.out.println("ID: " + percorrenzaTest.getId());
                         System.out.println("Mezzo: " + percorrenzaTest.getMezzo().getId());
