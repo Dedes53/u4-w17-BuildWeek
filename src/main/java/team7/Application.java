@@ -323,6 +323,7 @@ public class Application {
                     case 8:
                         // - TODO dio bono fai i metodi delle tratte
 
+
                         break;
                     case 9:
                         // TEST PERCORRENZADAO
@@ -334,54 +335,22 @@ public class Application {
                         // - stampa le percorrenze di una tratta
                         // TEST PERCORRENZADAO
 
-                        // - creo una tratta di appoggio
-                        Tratta trattaPercorrenza = new Tratta("Deposito", "Capolinea Nord", 35);
-                        trattaDAO.salvaTratta(trattaPercorrenza);
-
-                        // - creo un mezzo di appoggio
-                        Mezzo mezzoPercorrenza = new Mezzo("BUS-PERC-01", TipoMezzo.BUS, StatoMezzo.IN_SERVIZIO, 85);
-                        mezzoDAO.save(mezzoPercorrenza);
-
-                        // - registra una percorrenza di un mezzo su una tratta
-                        LocalDateTime datapartenza = LocalDateTime.now();
-                        LocalDateTime dataarrivo = datapartenza.plusMinutes(42);
-
-
-
-                        // - TODO fai percorrenze
-                        Percorrenza percorrenzaTest = new Percorrenza(mezzoPercorrenza, trattaPercorrenza, datapartenza, dataarrivo);
-                        percorrenzaDAO.salvapERCORRENZA(percorrenzaTest);
-
-
-
-
-                        System.out.println("Percorrenza salvata:");
-                        System.out.println("ID: " + percorrenzaTest.getId());
-                        System.out.println("Mezzo: " + percorrenzaTest.getMezzo().getId());
-                        System.out.println("Tratta: " + percorrenzaTest.getTratta().getId());
-                        System.out.println("Partenza: " + percorrenzaTest.getDataOraPartenza());
-                        System.out.println("Arrivo: " + percorrenzaTest.getDataOraArrivo());
-                        System.out.println("Tempo effettivo: " + percorrenzaTest.getTempoEffettivoPercorrenza().toMinutes() + " minuti");
-                        System.out.println("Scostamento: " + percorrenzaTest.getScostamentoRispettoAlPrevisto());
-
                         // - salva tempo effettivo di percorrenza
                         System.out.println("Tempo effettivo registrato correttamente.");
 
                         // - conta quante volte un mezzo ha percorso una tratta
                         // al momento, se non hai un count dedicato, stampi la size della lista
-                        int numeroPercorrenze = percorrenzaDAO
-                                .trovaPerMezzo(mezzoPercorrenza.getId().toString())
-                                .size();
+                        /*
+
+
+                        int numeroPercorrenze = percorrenzaDAO.trovaPerMezzo(mezzoPercorrenza.getId().toString()).size();
                         System.out.println("Numero percorrenze del mezzo: " + numeroPercorrenze);
 
                         // - calcola il tempo medio effettivo di percorrenza
                         Double mediaTratta = percorrenzaDAO.CalcolaTempoMedio(trattaPercorrenza.getId().toString());
                         System.out.println("Tempo medio effettivo della tratta: " + mediaTratta);
 
-                        Double mediaTrattaMezzo = percorrenzaDAO.CalcolaTempoMedioperMEzzo(
-                                trattaPercorrenza.getId().toString(),
-                                mezzoPercorrenza.getId().toString()
-                        );
+                        Double mediaTrattaMezzo = percorrenzaDAO.CalcolaTempoMedioperMEzzo(trattaPercorrenza.getId().toString(), mezzoPercorrenza.getId().toString());
                         System.out.println("Tempo medio effettivo della tratta per il mezzo: " + mediaTrattaMezzo);
 
                         // - stampa le percorrenze di un mezzo
@@ -391,7 +360,7 @@ public class Application {
                         // - stampa le percorrenze di una tratta
                         System.out.println("Percorrenze della tratta:");
                         percorrenzaDAO.TrovaTratta(trattaPercorrenza.getId().toString()).forEach(System.out::println);
-
+                         */
                         break;
                     case 10:
 
