@@ -537,7 +537,7 @@ public class Application {
                                             scanner.nextLine();
 
                                             System.out.println("Inserisci nome attività:");
-                                            nome = scanner.nextLine();
+                                             nome = scanner.nextLine();
 
                                             if (sceltaRiv == 1) {
                                                 // Rivenditore autorizzato
