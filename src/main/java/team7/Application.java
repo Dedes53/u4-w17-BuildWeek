@@ -8,16 +8,12 @@ import team7.entities.*;
 import team7.enumm.StatoMezzo;
 import team7.enumm.TipoAbbonamento;
 import team7.enumm.TipoMezzo;
-
-
-// aggiungere trim() allo scanner...chiedere raffa o fede
-
-
 import java.util.List;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
+// aggiungere trim() allo scanner...chiedere raffa o fede
 
 public class Application {
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("team7");
