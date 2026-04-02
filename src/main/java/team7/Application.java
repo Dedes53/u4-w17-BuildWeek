@@ -11,12 +11,15 @@ import team7.enumm.TipoMezzo;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 // aggiungere trim() allo scanner...chiedere raffa o fede
 
 public class Application {
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("team7");
+
+    private static final List<Rivenditore> rivenditori = new ArrayList<>();
 
     public static void main(String[] args) {
 
@@ -59,9 +62,18 @@ public class Application {
         //        TEST PER EMISSIONE BIGLIETTO
         Rivenditore r1 = new RivenditoreAutorizzato("Bar Roma");
         Rivenditore r2 = new RivenditoreAutorizzato("Bar Coop");
+        Rivenditore r3 = new DistributoreAutomatico("Bar Arcobaleno", false);
+        Rivenditore r4 = new DistributoreAutomatico("Automatico FS", true);
 
         rivenditoreDAO.save(r1);
         rivenditoreDAO.save(r2);
+        rivenditoreDAO.save(r3);
+        rivenditoreDAO.save(r4);
+
+        rivenditori.add(r1);
+        rivenditori.add(r2);
+        rivenditori.add(r3);
+        rivenditori.add(r4);
 
         Biglietto b1 = rivenditoreDAO.emettiBiglietto(r1);
         Biglietto b2 = rivenditoreDAO.emettiBiglietto(r1);
@@ -125,8 +137,30 @@ public class Application {
 
                     case 2:
                         // Emissione biglietti da rivenditore
+                        // compraBiglietto
+                        Scanner s = new Scanner(System.in);
+
+                        System.out.println("Per procedere all'acquisto di un biglietto selezionare prima il rivenditore:\n" +
+                                "1 - Bar Coop\n" +
+                                "2 - Bar Roma\n" +
+                                "3 - Automatico Bar Arcobaleno\n" +
+                                "4 - Automatico Stazione FS\n" +
+                                "5 - Indietro");
+
+                        int riv = s.nextInt();
+                        Rivenditore r = switch (riv) {
+                            case 1 -> r1;
+                            case 2 -> r2;
+                            case 3 -> r3;
+                            case 4 -> r4;
+                            case 5 -> r1; //trovare il modod di tornare indietro
+                            default -> null;
+                        };
+                        if (r == null) System.out.println("Valore inserito non riconosciuto, si prega di riprovare");
+
 
                         break;
+
 
                     case 3:
                         // Compra Abbonamento
@@ -537,7 +571,7 @@ public class Application {
                                             scanner.nextLine();
 
                                             System.out.println("Inserisci nome attività:");
-                                             nome = scanner.nextLine();
+                                            nome = scanner.nextLine();
 
                                             if (sceltaRiv == 1) {
                                                 // Rivenditore autorizzato
@@ -601,6 +635,24 @@ public class Application {
         scanner.close();
         em.close();
         emf.close();
+    }
+
+    static void compraBiglietto() {
+        Scanner s = new Scanner(System.in);
+
+        for (int i = 0; i < rivenditori.size(); i++) {
+            System.out.println((i + 1) + " - " + rivenditori.get(i).getNomeAttivita());
+        }
+        int riv = s.nextInt();
+        Rivenditore r = switch (riv) {
+            case 1 -> rivenditori.get(riv - 1);
+            case 2 -> r2;
+            case 3 -> r3;
+            case 4 -> r4;
+            case 5 -> r1; //trovare il modod di tornare indietro
+            default -> null;
+        };
+        if (r == null) System.out.println("Valore inserito non riconosciuto, si prega di riprovare");
     }
 
 }
