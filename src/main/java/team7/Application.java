@@ -197,7 +197,7 @@ public class Application {
                         break;
 
                     case 4:
-                        // TEST BIGLIETTODAO
+                        // verifico validita abbonamento
                         System.out.println("Funzionalità non ancora implementata.");
                         break;
 
