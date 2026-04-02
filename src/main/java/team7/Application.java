@@ -87,7 +87,17 @@ public class Application {
 
         utenteDAO.save(u1);
         utenteDAO.save(u2);
-        utenteDAO.save(u3);
+        utenteDAO.save(u3);//senza tessera
+
+        //tessera
+        Tessera t1 = utenteDAO.creaNuovaTessera(u1);
+        Tessera t2 = utenteDAO.creaNuovaTessera(u2);
+        //t1 salvato in data odierna
+        t2.setDataDiScadenza(LocalDate.of(2025,10,14));
+        utenteDAO.saveTessera(t2);
+        
+
+
 
         try {
             do {
