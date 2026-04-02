@@ -22,6 +22,8 @@ import java.util.UUID;
 import static java.lang.Integer.parseInt;
 // aggiungere trim() allo scanner...chiedere raffa o fede
 
+import static team7.dao.UtenteDAO.controllaAbbonamento;
+
 public class Application {
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("team7");
 
@@ -198,7 +200,7 @@ public class Application {
 
                     case 4:
                         // verifico validita abbonamento
-                        System.out.println("Funzionalità non ancora implementata.");
+                        verificoValidita();
                         break;
 
                     case 5:
@@ -945,5 +947,23 @@ public class Application {
             compraAbbonamento();
         }
         return durata;
+    }
+
+    static void verificoValidita() {
+        Scanner s = new Scanner(System.in);
+        System.out.println("Per verificare se il tuo abbonamento è ancora valido, devi accedere al tuo profilo utente.\n" +
+                "Inserisci di seguito il nome del profilo utente");
+
+        String nomeUtente = s.nextLine().trim();
+
+        Utente u = em.createQuery("select u from Utente u where concat(u.nome, ' ', u.cognome) like :nomeInserito", Utente.class)
+                .setParameter("nomeInserito", "%" + nomeUtente + "%").getSingleResult();
+
+        Abbonamento a = controllaAbbonamento(u);
+
+        if (a.getDataFine().isBefore(LocalDate.now()))
+            System.out.println("Il tuo abbonamento è ancora valido, scadrà in data " + a.getDataFine());
+        else
+            System.out.println("Ci dispiace, ma il tuo abbonamento è scaduto in data " + a.getDataFine());
     }
 }

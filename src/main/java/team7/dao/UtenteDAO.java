@@ -26,7 +26,7 @@ public class UtenteDAO {
     }
 
     //   metodi di Utente
-    static Abbonamento controllaAbbonamento(Utente u) {
+    public static Abbonamento controllaAbbonamento(Utente u) {
         //utente -> Tessera -> Abbonamento
         EntityManager em = emf.createEntityManager();
         Abbonamento res = null;
@@ -84,7 +84,7 @@ public class UtenteDAO {
             System.out.println(e.getMessage());
         }
     }
- 
+
     public Tessera creaNuovaTessera(Utente u) {
         Tessera t = new Tessera(u);
         this.saveTessera(t);
