@@ -80,10 +80,10 @@ public class Application {
         try {
             do {
                 System.out.println("MENU ");
-                System.out.println("1 Test UtenteDAO");
-                System.out.println("2 Test TesseraDAO");
-                System.out.println("3 Test AbbonamentoDAO");
-                System.out.println("4 Test BigliettoDAO");
+                System.out.println("1 Registrati");
+                System.out.println("2 Compra Biglietto");
+                System.out.println("3 Compra Abbonamento ");
+                System.out.println("4 Valida Abbonamento");
                 System.out.println("5 Test RivenditoreDAO");
                 System.out.println("6 Test MezzoDAO");
                 System.out.println("7 Test PeriodoStatoMezzoDAO");
@@ -96,18 +96,19 @@ public class Application {
 
                 switch (scelta) {
                     case 1:
-                        // TEST UTENTEDAO
+                        // Registrazione
 
 
                         break;
 
                     case 2:
-                        // TEST TESSERADAO
+                        // Emissione biglietti da rivenditore
 
                         break;
 
                     case 3:
-                        // TEST ABBONAMENTODAO
+                        // Compra Abbonamento
+                        //se la tessera è scaduta ..dire di rinnovarla
 
                         break;
 
@@ -359,6 +360,9 @@ public class Application {
                                 System.out.println("2  Salva tratta");
                                 System.out.println("3  Salva percorrenza");
                                 System.out.println("4  Salva rivenditore");
+                                System.out.println("5  Totale biglietti/abbonamenti emessi per tempo");
+                                System.out.println("6  Totale biglietti/abbonamenti emessi per mezzo");
+
                                 System.out.println("0  Torna indietro");
 
                                 sceltaInserimento = scanner.nextInt();
