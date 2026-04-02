@@ -126,13 +126,13 @@ public class Application {
         Mezzo mezzo1 = new Mezzo("BUS-CAN-01", TipoMezzo.BUS, StatoMezzo.IN_SERVIZIO, 45);
         mezzoDAO.save(mezzo1);
         Mezzo mezzo2 = new Mezzo("BUS-CAN-02", TipoMezzo.BUS, StatoMezzo.IN_SERVIZIO, 20);
-        mezzoDAO.save(mezzo1);
+        mezzoDAO.save(mezzo2);
         Mezzo mezzo3 = new Mezzo("TRAM-MAD-03", TipoMezzo.TRAM, StatoMezzo.IN_SERVIZIO, 120);
-        mezzoDAO.save(mezzo1);
-        Mezzo mezzo4 = new Mezzo("BUS-MAD-04", TipoMezzo.TRAM, StatoMezzo.IN_SERVIZIO, 200);
-        mezzoDAO.save(mezzo1);
+        mezzoDAO.save(mezzo3);
+        Mezzo mezzo4 = new Mezzo("TRAM-MAD-04", TipoMezzo.TRAM, StatoMezzo.IN_SERVIZIO, 200);
+        mezzoDAO.save(mezzo4);
         Mezzo mezzo5 = new Mezzo("BUS-CAN-05", TipoMezzo.BUS, StatoMezzo.IN_MANUTENZIONE, 40);
-        mezzoDAO.save(mezzo1);
+        mezzoDAO.save(mezzo5);
 
         // - registra una percorrenza di un mezzo su una tratta
         LocalDateTime datapartenza = LocalDateTime.now();
@@ -206,142 +206,10 @@ public class Application {
                         System.out.println("Funzionalità non ancora implementata.");
                         break;
 
-                    /*
-                    VECCHIO CASE 6 - TEST MEZZODAO
-
-                    case 6:
-                        try {
-                            Mezzo bus64 = mezzoDAO.findByCodice("BUS-64");
-                            if (bus64 == null) {
-                                bus64 = new Mezzo("BUS-64", TipoMezzo.BUS, StatoMezzo.IN_SERVIZIO, 80);
-                                mezzoDAO.save(bus64);
-                                System.out.println("Creato: " + bus64);
-                            } else {
-                                System.out.println("BUS-64 esiste già:");
-                                System.out.println(bus64);
-                            }
-
-                            Mezzo tram12 = mezzoDAO.findByCodice("TRAM-12");
-                            if (tram12 == null) {
-                                tram12 = new Mezzo("TRAM-12", TipoMezzo.TRAM, StatoMezzo.IN_SERVIZIO, 120);
-                                mezzoDAO.save(tram12);
-                                System.out.println("Creato: " + tram12);
-                            } else {
-                                System.out.println("TRAM-12 esiste già:");
-                                System.out.println(tram12);
-                            }
-
-                            Mezzo bus78 = mezzoDAO.findByCodice("BUS-78");
-                            if (bus78 == null) {
-                                bus78 = new Mezzo("BUS-78", TipoMezzo.BUS, StatoMezzo.IN_MANUTENZIONE, 50);
-                                mezzoDAO.save(bus78);
-                                System.out.println("Creato: " + bus78);
-                            } else {
-                                System.out.println("BUS-78 esiste già:");
-                                System.out.println(bus78);
-                            }
-
-                            List<PeriodoStatoMezzo> storicoBus64 = periodoDAO.trovaStoricoPerMezzo(bus64.getId().toString());
-
-                            if (storicoBus64.size() == 1) {
-                                LocalDate dataInizioPrimoPeriodo = storicoBus64.get(0).getDataInizio();
-                                LocalDate dataInizioManutenzione = dataInizioPrimoPeriodo.plusDays(2);
-                                LocalDate dataRitornoServizio = dataInizioPrimoPeriodo.plusDays(4);
-
-                                mezzoDAO.cambiaStato(
-                                        bus64.getId().toString(),
-                                        StatoMezzo.IN_MANUTENZIONE,
-                                        dataInizioManutenzione
-                                );
-
-                                mezzoDAO.cambiaStato(
-                                        bus64.getId().toString(),
-                                        StatoMezzo.IN_SERVIZIO,
-                                        dataRitornoServizio
-                                );
-
-                                System.out.println("Storico BUS-64 aggiornato con un periodo di manutenzione.");
-                            }
-
-                            Tratta trattaTest;
-                            List<Tratta> tratte = trattaDAO.TrovaTutteLeTratte();
-
-                            if (tratte.isEmpty()) {
-                                trattaTest = new Tratta("Deposito", "Centro", 30);
-                                trattaDAO.salvaTratta(trattaTest);
-                                System.out.println("Creata tratta di test: " + trattaTest);
-                            } else {
-                                trattaTest = tratte.get(0);
-                                System.out.println("Uso tratta già esistente: " + trattaTest);
-                            }
-
-                            LocalDateTime partenzaTest = LocalDateTime.now();
-                            Percorrenza percorrenzaTest = new Percorrenza(
-                                    bus64,
-                                    trattaTest,
-                                    partenzaTest,
-                                    partenzaTest.plusMinutes(35)
-                            );
-                            percorrenzaDAO.salvapERCORRENZA(percorrenzaTest);
-
-                            System.out.println("BUS-64 assegnato alla tratta tramite percorrenza:");
-                            System.out.println(percorrenzaTest);
-
-                            System.out.println("Mezzi di tipo BUS:");
-                            mezzoDAO.findByTipo(TipoMezzo.BUS).forEach(System.out::println);
-
-                            System.out.println("Mezzi in manutenzione:");
-                            mezzoDAO.findByStato(StatoMezzo.IN_MANUTENZIONE).forEach(System.out::println);
-
-                        } catch (Exception e) {
-                            System.out.println("Errore: " + e.getMessage());
-                            e.printStackTrace();
-                        }
-                        break;
-                    */
                     case 6:
                         menuGestioneMezzi(scanner, mezzoDAO, trattaDAO, percorrenzaDAO);
                         break;
 
-                    /*
-                    VECCHIO CASE 7 - TEST PERIODOSTATOMEZZODAO
-
-                    case 7:
-                        try {
-                            System.out.println("STORICO MEZZO");
-
-                            Mezzo mezzoTest = mezzoDAO.findByCodice("BUS-64");
-
-                            if (mezzoTest == null) {
-                                System.out.println("Mezzo BUS-64 non trovato. Esegui prima il case 6.");
-                                break;
-                            }
-
-                            System.out.println("Mezzo trovato:");
-                            System.out.println(mezzoTest);
-
-                            System.out.println("Storico completo del mezzo:");
-                            periodoDAO.trovaStoricoPerMezzo(mezzoTest.getId().toString())
-                                    .forEach(System.out::println);
-
-                            List<PeriodoStatoMezzo> manutenzioni = periodoDAO.trovaManutenzioniPerMezzo(mezzoTest.getId().toString());
-
-                            System.out.println("Periodi di manutenzione:");
-                            if (manutenzioni.isEmpty()) {
-                                System.out.println("Nessun periodo di manutenzione trovato.");
-                            } else {
-                                manutenzioni.forEach(System.out::println);
-                            }
-
-                            System.out.println("Periodo attivo attuale:");
-                            System.out.println(periodoDAO.trovaPeriodoAttivoPerMezzo(mezzoTest.getId().toString()));
-
-                        } catch (Exception e) {
-                            System.out.println("Errore: " + e.getMessage());
-                            e.printStackTrace();
-                        }
-                        break;
-                    */
                     case 7:
                         menuStoricoMezzi(scanner, mezzoDAO, periodoDAO);
                         break;
