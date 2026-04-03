@@ -22,122 +22,103 @@ import java.util.UUID;
 import static java.lang.Integer.parseInt;
 
 public class Application {
+
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("team7");
     private static final List<Rivenditore> rivenditori = new ArrayList<>();
-    // EntityManagerFactory emf = Persistence.createEntityManagerFactory("team7");
+
     static EntityManager em = emf.createEntityManager();
-    // DAO rivenditori e utenti
+
+    // DAO
     static UtenteDAO utenteDAO = new UtenteDAO(em);
     static RivenditoreDAO rivenditoreDAO = new RivenditoreDAO(em);
+    static BigliettoDAO bigliettoDAO = new BigliettoDAO(em);
+    static AbbonamentoDAO abbonamentoDAO = new AbbonamentoDAO(em);
+    static MezzoDAO mezzoDAO = new MezzoDAO(em);
+    static PeriodoStatoMezzoDAO periodoDAO = new PeriodoStatoMezzoDAO(em);
+    static TrattaDAO trattaDAO = new TrattaDAO(em);
+    static PercorrenzaDAO percorrenzaDAO = new PercorrenzaDAO(em);
     static Utente u3 = new Utente("Massimo", "Bianchi"); // per test metodo crea abbonamento
 
+    
     public static void main(String[] args) {
-
-        //DAO Titoli di viaggio
-
-        BigliettoDAO bigliettoDAO = new BigliettoDAO(em);
-        AbbonamentoDAO abbonamentoDAO = new AbbonamentoDAO(em);
-
-        // DAO mezzi e storico
-
-        //per mezzo
-        MezzoDAO mezzoDAO = new MezzoDAO(em);
-        PeriodoStatoMezzoDAO periodoDAO = new PeriodoStatoMezzoDAO(em);
-
-        // DAO tratte e percorrenze
-        TrattaDAO trattaDAO = new TrattaDAO(em);
-        PercorrenzaDAO percorrenzaDAO = new PercorrenzaDAO(em);
-
-
-        //da qua salviamo utenti, mezzi, tratte, percorrenze
-
 
         Scanner scanner = new Scanner(System.in);
         int scelta;
 
-        // Dati di test già presenti nel progetto
         Utente u1 = new Utente("Mario", "Rossi");
         Utente u2 = new Utente("Maurizio", "Verdi");
+        Utente u3 = new Utente("Filippo", "Neri");
 
 
+        // DA COMMENTARE DOPO PRIMO AVVIO
         utenteDAO.save(u1);
         utenteDAO.save(u2);
         utenteDAO.save(u3);
 
-        Tessera t1 = utenteDAO.creaNuovaTessera(u1);
-        Tessera t2 = utenteDAO.creaNuovaTessera(u2);
+
+        // DA COMMENTARE DOPO PRIMO AVVIO
+        Tessera t1 = utenteDAO.creaNuovaTessera(u1); //tessera Mario Rossi (valida)
+        Tessera t2 = utenteDAO.creaNuovaTessera(u2); //tessera Maurizio Verdi (scaduta)
         t2.setDataDiScadenza(LocalDate.of(2025, 10, 14));
         utenteDAO.saveTessera(t2);
+
 
         Rivenditore r1 = new RivenditoreAutorizzato("Bar Roma");
         Rivenditore r2 = new RivenditoreAutorizzato("Bar Coop");
         Rivenditore r3 = new DistributoreAutomatico("Bar Arcobaleno", false);
         Rivenditore r4 = new DistributoreAutomatico("Automatico FS", true);
 
-        rivenditoreDAO.save(r1);
-        rivenditoreDAO.save(r2);
-        rivenditoreDAO.save(r3);
-        rivenditoreDAO.save(r4);
-
+        // aggiungo i rivenditori alla lista dei rivenditori da utilizzare nei metodi
         rivenditori.add(r1);
         rivenditori.add(r2);
         rivenditori.add(r3);
         rivenditori.add(r4);
 
+
+        // DA COMMENTARE DOPO PRIMO AVVIO
+        rivenditoreDAO.save(r1);
+        rivenditoreDAO.save(r2);
+        rivenditoreDAO.save(r3);
+        rivenditoreDAO.save(r4);
+
+        // DA COMMENTARE DOPO PRIMO AVVIO
         Biglietto b1 = rivenditoreDAO.emettiBiglietto(r1);
         Biglietto b2 = rivenditoreDAO.emettiBiglietto(r1);
         Biglietto b3 = rivenditoreDAO.emettiBiglietto(r2);
         Biglietto b4 = rivenditoreDAO.emettiBiglietto(r2);
-
         Abbonamento a1 = rivenditoreDAO.emettiAbbonamento(r1, TipoAbbonamento.ANNUALE, t1);
-//        Abbonamento a2 = rivenditoreDAO.emettiAbbonamento(r1, TipoAbbonamento.MENSILE, t1);
-        Abbonamento a3 = rivenditoreDAO.emettiAbbonamento(r1, TipoAbbonamento.SETTIMANALE, t2);
-//        Abbonamento a4 = rivenditoreDAO.emettiAbbonamento(r2, TipoAbbonamento.ANNUALE, t1);
-//        Abbonamento a5 = rivenditoreDAO.emettiAbbonamento(r2, TipoAbbonamento.MENSILE, t1);
-//        Abbonamento a6 = rivenditoreDAO.emettiAbbonamento(r2, TipoAbbonamento.SETTIMANALE, t2);
-
-        System.out.println("Biglietti dal primo rivenditore");
-        System.out.println(b1);
-        System.out.println(b2);
-
-        System.out.println("Biglietti dal secondo rivenditore");
-        System.out.println(b3);
-        System.out.println(b4);
-
-        System.out.println("Abbonamenti dal primo rivenditore");
-        System.out.println(a1);
-//        System.out.println(a2);
-        System.out.println(a3);
-
-//        System.out.println("Abbonamenti dal secondo rivenditore");
-//        System.out.println(a4);
-//        System.out.println(a5);
-//        System.out.println(a6);
+        Abbonamento a6 = rivenditoreDAO.emettiAbbonamento(r2, TipoAbbonamento.SETTIMANALE, t2);
 
         //tratte
         Tratta tratta1 = new Tratta("Termini", "Ostia Lido", 28);
         Tratta tratta2 = new Tratta("Piazza Venezia", "EUR Magliana", 10);
         Tratta tratta3 = new Tratta("San Pietro", "Colosseo", 5);
         Tratta tratta4 = new Tratta("Ponte Milvio", "Trastevere", 8);
-        //salviamo
+
+
+        // DA COMMENTARE DOPO PRIMO AVVIO
         trattaDAO.salvaTratta(tratta1);
         trattaDAO.salvaTratta(tratta2);
         trattaDAO.salvaTratta(tratta3);
         trattaDAO.salvaTratta(tratta4);
+
+
         //percorrenze
         // prima devo creare i mezzi
         Mezzo mezzo1 = new Mezzo("BUS-CAN-01", TipoMezzo.BUS, StatoMezzo.IN_SERVIZIO, 45);
-        mezzoDAO.save(mezzo1);
         Mezzo mezzo2 = new Mezzo("BUS-CAN-02", TipoMezzo.BUS, StatoMezzo.IN_SERVIZIO, 20);
-        mezzoDAO.save(mezzo2);
         Mezzo mezzo3 = new Mezzo("TRAM-MAD-03", TipoMezzo.TRAM, StatoMezzo.IN_SERVIZIO, 120);
-        mezzoDAO.save(mezzo3);
         Mezzo mezzo4 = new Mezzo("TRAM-MAD-04", TipoMezzo.TRAM, StatoMezzo.IN_SERVIZIO, 200);
-        mezzoDAO.save(mezzo4);
         Mezzo mezzo5 = new Mezzo("BUS-CAN-05", TipoMezzo.BUS, StatoMezzo.IN_MANUTENZIONE, 40);
-        mezzoDAO.save(mezzo5);
 
-        PeriodoStatoMezzo pm1 =new PeriodoStatoMezzo(mezzo5,StatoMezzo.IN_MANUTENZIONE, LocalDate.of(2024, 12, 25), LocalDate.of(2025, 12, 25));
+        PeriodoStatoMezzo pm1 = new PeriodoStatoMezzo(mezzo5, StatoMezzo.IN_MANUTENZIONE, LocalDate.of(2024, 12, 25), LocalDate.of(2025, 12, 25));
+
+        // DA COMMENTARE DOPO PRIMO AVVIO
+        mezzoDAO.save(mezzo1);
+        mezzoDAO.save(mezzo2);
+        mezzoDAO.save(mezzo3);
+        mezzoDAO.save(mezzo4);
+        mezzoDAO.save(mezzo5);
         periodoDAO.save(pm1);
 
         // - registra una percorrenza di un mezzo su una tratta
@@ -145,19 +126,41 @@ public class Application {
         LocalDateTime dataarrivo = datapartenza.plusMinutes(28);
         //ora vado a inserire i dati nella percorrenza
         Percorrenza percorrenza1 = new Percorrenza(mezzo1, tratta1, datapartenza, dataarrivo);
-        percorrenzaDAO.salvapERCORRENZA(percorrenza1);
         //rimetto la tempistica di arrivo per percorrenza2
         dataarrivo = datapartenza.plusMinutes(10);
         Percorrenza percorrenza2 = new Percorrenza(mezzo2, tratta2, datapartenza, dataarrivo);
-        percorrenzaDAO.salvapERCORRENZA(percorrenza2);
         //percorrenza3
         dataarrivo = datapartenza.plusMinutes(5);
         Percorrenza percorrenza3 = new Percorrenza(mezzo3, tratta2, datapartenza, dataarrivo);
-        percorrenzaDAO.salvapERCORRENZA(percorrenza3);
         //percorrenza4
         dataarrivo = datapartenza.plusMinutes(8);
         Percorrenza percorrenza4 = new Percorrenza(mezzo4, tratta2, datapartenza, dataarrivo);
+
+
+        // DA COMMENTARE DOPO PRIMO AVVIO
+        percorrenzaDAO.salvapERCORRENZA(percorrenza1);
+        percorrenzaDAO.salvapERCORRENZA(percorrenza2);
+        percorrenzaDAO.salvapERCORRENZA(percorrenza3);
         percorrenzaDAO.salvapERCORRENZA(percorrenza4);
+
+
+//        System.out.println("Biglietti dal primo rivenditore");
+//        System.out.println(b1);
+//        System.out.println(b2);
+//
+//        System.out.println("Biglietti dal secondo rivenditore");
+//        System.out.println(b3);
+//        System.out.println(b4);
+//
+//        System.out.println("Abbonamenti dal primo rivenditore");
+//        System.out.println(a1);
+//        System.out.println(a2);
+//        System.out.println(a3);
+
+//        System.out.println("Abbonamenti dal secondo rivenditore");
+//        System.out.println(a4);
+//        System.out.println(a5);
+//        System.out.println(a6);
 
 
         try {
