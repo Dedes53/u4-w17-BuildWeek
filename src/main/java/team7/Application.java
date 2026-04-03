@@ -1,9 +1,6 @@
 package team7;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.NoResultException;
-import jakarta.persistence.Persistence;
+import jakarta.persistence.*;
 import team7.dao.*;
 import team7.entities.*;
 import team7.enumm.StatoMezzo;
@@ -992,12 +989,22 @@ public class Application {
     }
 
     static public Tessera creaNuovaTesseraScanner(String nomeUtente, UtenteDAO utenteDAO) {
-        Utente u = em.createQuery("select u from Utente u where concat(u.nome, ' ', u.cognome) like :nomeInserito", Utente.class)
+        try{Utente u = em.createQuery("select u from Utente u where concat(u.nome, ' ', u.cognome) like :nomeInserito", Utente.class)
                 .setParameter("nomeInserito", "%" + nomeUtente + "%").getSingleResult();
-        Tessera t = new Tessera(u);
-        u.setTessera(t);
-        utenteDAO.saveTessera(t);
-        return t;
+            Tessera t = new Tessera(u);
+            u.setTessera(t);
+            utenteDAO.saveTessera(t);
+            return t;
+        } catch (NoResultException e){
+            System.out.println("Non sono stati trovati risultati con questo nome" + e.getMessage());
+        }
+        catch (NonUniqueResultException e){
+            System.out.println("Sono stati trovati più utenti con questo nome " + e.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("la creazione della tessera non e' andata a buon fine" + e.getMessage());
+        }
+        return null;
     }
 
 }
