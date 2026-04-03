@@ -2,6 +2,7 @@ package team7;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.Persistence;
 import team7.dao.*;
 import team7.entities.*;
@@ -951,39 +952,37 @@ public class Application {
     }
 
     static void verificoValidita(EntityManager em, UtenteDAO utenteDAO) {
-        Scanner s = new Scanner(System.in);
-        System.out.println("Per verificare se il tuo abbonamento è ancora valido, devi accedere al tuo profilo utente.\n" +
-                "Inserisci di seguito il nome del profilo utente");
 
-        String nomeUtente = s.nextLine().trim();
+            Scanner s = new Scanner(System.in);
+            System.out.println("Per verificare se il tuo abbonamento è ancora valido, devi accedere al tuo profilo utente.\n" +
+                    "Inserisci di seguito il nome del profilo utente");
 
-        Utente u = em.createQuery("select u from Utente u where concat(u.nome, ' ', u.cognome) like :nomeInserito", Utente.class)
-                .setParameter("nomeInserito", "%" + nomeUtente + "%").getSingleResult();
+            String nomeUtente = s.nextLine().trim();
+        try {
+            Utente u = em.createQuery("select u from Utente u where concat(u.nome, ' ', u.cognome) like :nomeInserito", Utente.class)
+                    .setParameter("nomeInserito", "%" + nomeUtente + "%").getSingleResult();
 
-        Abbonamento a = utenteDAO.controllaAbbonamento(u);
+            Abbonamento a = utenteDAO.controllaAbbonamento(u);
+            if (a == null) {
+                System.out.println("L'utente non ha alcun abbonamento associato.");
+                return;
+            }
 
-        if (a.getDataFine().isAfter(LocalDate.now()))
-            System.out.println("Il tuo abbonamento è ancora valido, scadrà in data " + a.getDataFine());
-        else
-            System.out.println("Ci dispiace, ma il tuo abbonamento è scaduto in data " + a.getDataFine());
+
+                if (a.getDataFine().isAfter(LocalDate.now())){
+                    System.out.println("Il tuo abbonamento è ancora valido, scadrà in data " + a.getDataFine());
+                }
+
+                 else{
+                     System.out.println("Ci dispiace, ma il tuo abbonamento è scaduto in data " + a.getDataFine());
+                }
+
+        } catch(NoResultException e){
+            System.out.println("non è stato trovato alcun utente con quel nome.");
+        } catch (Exception e) {
+            System.out.println("ma non e' stato trovato nulla " + e.getMessage());
+        }
+
     }
 }
-//    static void compraBiglietto() {
-//        Scanner s = new Scanner(System.in);
-//
-//        for (int i = 0; i < rivenditori.size(); i++) {
-//            System.out.println((i + 1) + " - " + rivenditori.get(i).getNomeAttivita());
-//        }
-//        int riv = s.nextInt();
-//        Rivenditore r = switch (riv) {
-/// /            case 1 -> rivenditori.get(riv - 1);
-/// /            case 2 -> r2;
-/// /            case 3 -> r3;
-/// /            case 4 -> r4;
-/// /            case 5 -> r1; //trovare il modod di tornare indietro
-/// /            default -> null;
-//        };
-//        if (r == null) System.out.println("Valore inserito non riconosciuto, si prega di riprovare");
-//    }
-//
-//
+
