@@ -164,12 +164,11 @@ public class Application {
                 System.out.println("2 Compra Biglietto");
                 System.out.println("3 Compra Abbonamento");
                 System.out.println("4 Valida Abbonamento");
-                System.out.println("5 Rivenditore");
-                System.out.println("6 Gestione mezzi");
-                System.out.println("7 Storico mezzi");
-                System.out.println("8 Test TrattaDAO");
-                System.out.println("9 Test PercorrenzaDAO");
-                System.out.println("10 Controllo amministratore");
+                System.out.println("5 Gestione mezzi");
+                System.out.println("6 Storico mezzi");
+                System.out.println("7 Test TrattaDAO");
+                System.out.println("8 Test PercorrenzaDAO");
+                System.out.println("9 Controllo amministratore");
                 System.out.println("0 Esci");
 
                 scelta = parseInt(scanner.nextLine());
@@ -204,19 +203,14 @@ public class Application {
                         break;
 
                     case 5:
-                        // TEST RIVENDITOREDAO
-                        System.out.println("Funzionalità non ancora implementata.");
-                        break;
-
-                    case 6:
                         menuGestioneMezzi(scanner, mezzoDAO, trattaDAO, percorrenzaDAO);
                         break;
 
-                    case 7:
+                    case 6:
                         menuStoricoMezzi(scanner, mezzoDAO, periodoDAO);
                         break;
 
-                    case 8:
+                    case 7:
                         System.out.println("Menu delle Tratte ");
                         System.out.println("1 Trova tratta per id");
                         System.out.println("2 Mostra tutte le tratte");
@@ -265,7 +259,7 @@ public class Application {
                                 System.out.println("Errore....Scelta sbagliata");
                         }
                         break;
-                    case 9:
+                    case 8:
                         System.out.println("Menu delle Percorrenze ");
                         System.out.println("1 Trova percorrenze per tratta  ");
                         System.out.println("2 Trova percorrenze per mezzo");
@@ -371,7 +365,7 @@ public class Application {
                         }
                         break;
 
-                    case 10:
+                    case 9:
                         int passcode = 5432;
                         int pass = leggiIntero(scanner, "Inserisci il passcode: ");
 
