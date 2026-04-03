@@ -20,22 +20,18 @@ import java.util.Scanner;
 import java.util.UUID;
 
 import static java.lang.Integer.parseInt;
-// aggiungere trim() allo scanner...chiedere raffa o fede
-
-import static team7.dao.UtenteDAO.controllaAbbonamento;
 
 public class Application {
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("team7");
-
     private static final List<Rivenditore> rivenditori = new ArrayList<>();
+    // EntityManagerFactory emf = Persistence.createEntityManagerFactory("team7");
     static EntityManager em = emf.createEntityManager();
+    // DAO rivenditori e utenti
+    static UtenteDAO utenteDAO = new UtenteDAO(em);
     static RivenditoreDAO rivenditoreDAO = new RivenditoreDAO(em);
     static Utente u3 = new Utente("Massimo", "Bianchi"); // per test metodo crea abbonamento
 
     public static void main(String[] args) {
-
-        // EntityManagerFactory emf = Persistence.createEntityManagerFactory("team7");
-        EntityManager em = emf.createEntityManager();
 
         //DAO Titoli di viaggio
 
@@ -52,9 +48,7 @@ public class Application {
         TrattaDAO trattaDAO = new TrattaDAO(em);
         PercorrenzaDAO percorrenzaDAO = new PercorrenzaDAO(em);
 
-        // DAO rivenditori e utenti
 
-        UtenteDAO utenteDAO = new UtenteDAO(em);
         //da qua salviamo utenti, mezzi, tratte, percorrenze
 
 
@@ -96,11 +90,11 @@ public class Application {
         Biglietto b4 = rivenditoreDAO.emettiBiglietto(r2);
 
         Abbonamento a1 = rivenditoreDAO.emettiAbbonamento(r1, TipoAbbonamento.ANNUALE, t1);
-        Abbonamento a2 = rivenditoreDAO.emettiAbbonamento(r1, TipoAbbonamento.MENSILE, t1);
+//        Abbonamento a2 = rivenditoreDAO.emettiAbbonamento(r1, TipoAbbonamento.MENSILE, t1);
         Abbonamento a3 = rivenditoreDAO.emettiAbbonamento(r1, TipoAbbonamento.SETTIMANALE, t2);
-        Abbonamento a4 = rivenditoreDAO.emettiAbbonamento(r2, TipoAbbonamento.ANNUALE, t1);
-        Abbonamento a5 = rivenditoreDAO.emettiAbbonamento(r2, TipoAbbonamento.MENSILE, t1);
-        Abbonamento a6 = rivenditoreDAO.emettiAbbonamento(r2, TipoAbbonamento.SETTIMANALE, t2);
+//        Abbonamento a4 = rivenditoreDAO.emettiAbbonamento(r2, TipoAbbonamento.ANNUALE, t1);
+//        Abbonamento a5 = rivenditoreDAO.emettiAbbonamento(r2, TipoAbbonamento.MENSILE, t1);
+//        Abbonamento a6 = rivenditoreDAO.emettiAbbonamento(r2, TipoAbbonamento.SETTIMANALE, t2);
 
         System.out.println("Biglietti dal primo rivenditore");
         System.out.println(b1);
@@ -112,13 +106,13 @@ public class Application {
 
         System.out.println("Abbonamenti dal primo rivenditore");
         System.out.println(a1);
-        System.out.println(a2);
+//        System.out.println(a2);
         System.out.println(a3);
 
-        System.out.println("Abbonamenti dal secondo rivenditore");
-        System.out.println(a4);
-        System.out.println(a5);
-        System.out.println(a6);
+//        System.out.println("Abbonamenti dal secondo rivenditore");
+//        System.out.println(a4);
+//        System.out.println(a5);
+//        System.out.println(a6);
 
         //tratte
         Tratta tratta1 = new Tratta("Termini", "Ostia Lido", 28);
@@ -150,7 +144,7 @@ public class Application {
         Percorrenza percorrenza1 = new Percorrenza(mezzo1, tratta1, datapartenza, dataarrivo);
         percorrenzaDAO.salvapERCORRENZA(percorrenza1);
         //rimetto la tempistica di arrivo per percorrenza2
-         dataarrivo = datapartenza.plusMinutes(10);
+        dataarrivo = datapartenza.plusMinutes(10);
         Percorrenza percorrenza2 = new Percorrenza(mezzo2, tratta2, datapartenza, dataarrivo);
         percorrenzaDAO.salvapERCORRENZA(percorrenza2);
         //percorrenza3
@@ -206,7 +200,7 @@ public class Application {
 
                     case 4:
                         // verifico validita abbonamento
-                        verificoValidita();
+                        verificoValidita(em, utenteDAO);
                         break;
 
                     case 5:
@@ -230,46 +224,46 @@ public class Application {
                         System.out.println("4 Conta quante volte quella tratta e' stata percorsa");
 
                         int sceltaTratta = parseInt(scanner.nextLine());
-                 switch (sceltaTratta){
-                 case 1:
-                 try{
-                  System.out.println("Inserisci id della tratta:");
-                   String idtratta = scanner.nextLine();
-                    Tratta trovato= trattaDAO.trovaPerID(idtratta);
-                     System.out.println(trovato);
-                   }catch(NonTrovato e){
-                    System.out.println("Errore: tratta non trovata!" +e.getMessage());
-                     }
-                   break;
-                  case 2:
-                  List<Tratta> listatratte =trattaDAO.TrovaTutteLeTratte();
-                   System.out.println("--- ELENCO TRATTE ---");
-                  listatratte.forEach(System.out::println);
-                      break;
-                  case 3:
-                    try{
-                   System.out.println("Inserisci id della tratta per cancellarla:");
-                   String idtrattaD = scanner.nextLine();
-                   Tratta trovato= trattaDAO.cancellaTratta(idtrattaD);
-                   System.out.println(trovato);
-                   }catch(NonTrovato e){
-                   System.out.println("Errore: tratta non trovata!" +e.getMessage());
-                   }
-                  break;
-                  case 4:
-                   try {
-                    System.out.println("Inserisci ID tratta da contare:");
-                    String idDaContare = scanner.nextLine();
-                    Tratta trattaDaContare = trattaDAO.trovaPerID(idDaContare);
-                    long count = trattaDAO.ContaVolteperTratta(trattaDaContare);
-                   System.out.println("La tratta " + trattaDaContare.getZonaPartenza() + " - " + trattaDaContare.getZonaFinale() + " è stata percorsa " + count + " volte.");
-                    } catch (NonTrovato e) {
-                  System.out.println("Errore: tratta non trovata!"+ e.getMessage());
-                   }
-                      break;
-                       default:
-                         System.out.println("Errore....Scelta sbagliata");
-                     }
+                        switch (sceltaTratta) {
+                            case 1:
+                                try {
+                                    System.out.println("Inserisci id della tratta:");
+                                    String idtratta = scanner.nextLine();
+                                    Tratta trovato = trattaDAO.trovaPerID(idtratta);
+                                    System.out.println(trovato);
+                                } catch (NonTrovato e) {
+                                    System.out.println("Errore: tratta non trovata!" + e.getMessage());
+                                }
+                                break;
+                            case 2:
+                                List<Tratta> listatratte = trattaDAO.TrovaTutteLeTratte();
+                                System.out.println("--- ELENCO TRATTE ---");
+                                listatratte.forEach(System.out::println);
+                                break;
+                            case 3:
+                                try {
+                                    System.out.println("Inserisci id della tratta per cancellarla:");
+                                    String idtrattaD = scanner.nextLine();
+                                    Tratta trovato = trattaDAO.cancellaTratta(idtrattaD);
+                                    System.out.println(trovato);
+                                } catch (NonTrovato e) {
+                                    System.out.println("Errore: tratta non trovata!" + e.getMessage());
+                                }
+                                break;
+                            case 4:
+                                try {
+                                    System.out.println("Inserisci ID tratta da contare:");
+                                    String idDaContare = scanner.nextLine();
+                                    Tratta trattaDaContare = trattaDAO.trovaPerID(idDaContare);
+                                    long count = trattaDAO.ContaVolteperTratta(trattaDaContare);
+                                    System.out.println("La tratta " + trattaDaContare.getZonaPartenza() + " - " + trattaDaContare.getZonaFinale() + " è stata percorsa " + count + " volte.");
+                                } catch (NonTrovato e) {
+                                    System.out.println("Errore: tratta non trovata!" + e.getMessage());
+                                }
+                                break;
+                            default:
+                                System.out.println("Errore....Scelta sbagliata");
+                        }
                         break;
                     case 9:
                         System.out.println("Menu delle Percorrenze ");
@@ -435,12 +429,12 @@ public class Application {
                                             if (tipo.equals("biglietti")) {
 
                                                 Long totaleBiglietti = bigliettoDAO.countBigliettiPerPeriodo(inizio, fine);
-                                                System.out.println("Totale biglietti emessi nel periodo " + inizio +"-" + fine +":" + totaleBiglietti);
+                                                System.out.println("Totale biglietti emessi nel periodo " + inizio + "-" + fine + ":" + totaleBiglietti);
 
                                             } else if (tipo.equals("abbonamenti")) {
 
                                                 Long totaleAbbonamenti = abbonamentoDAO.countAbbonamentiPeriodo(inizio, fine);
-                                                System.out.println("Totale abbonamenti emessi nel periodo " + inizio +"-" + fine +":" +
+                                                System.out.println("Totale abbonamenti emessi nel periodo " + inizio + "-" + fine + ":" +
                                                         totaleAbbonamenti);
 
                                             } else {
@@ -463,7 +457,7 @@ public class Application {
                                             } else {
                                                 System.out.println("Biglietti vidimati sul mezzo " + codice + ":");
                                                 biglietti.forEach(System.out::println);
-                                                }
+                                            }
                                         } catch (Exception e) {
                                             System.out.println("Errore: " + e.getMessage());
                                         }
@@ -996,7 +990,7 @@ public class Application {
         return durata;
     }
 
-    static void verificoValidita() {
+    static void verificoValidita(EntityManager em, UtenteDAO utenteDAO) {
         Scanner s = new Scanner(System.in);
         System.out.println("Per verificare se il tuo abbonamento è ancora valido, devi accedere al tuo profilo utente.\n" +
                 "Inserisci di seguito il nome del profilo utente");
@@ -1006,9 +1000,9 @@ public class Application {
         Utente u = em.createQuery("select u from Utente u where concat(u.nome, ' ', u.cognome) like :nomeInserito", Utente.class)
                 .setParameter("nomeInserito", "%" + nomeUtente + "%").getSingleResult();
 
-        Abbonamento a = controllaAbbonamento(u);
+        Abbonamento a = utenteDAO.controllaAbbonamento(u);
 
-        if (a.getDataFine().isBefore(LocalDate.now()))
+        if (a.getDataFine().isAfter(LocalDate.now()))
             System.out.println("Il tuo abbonamento è ancora valido, scadrà in data " + a.getDataFine());
         else
             System.out.println("Ci dispiace, ma il tuo abbonamento è scaduto in data " + a.getDataFine());
