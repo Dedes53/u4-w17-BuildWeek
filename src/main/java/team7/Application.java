@@ -832,72 +832,51 @@ public class Application {
         int sceltaStorico;
 
         do {
-            System.out.println("\n--- STORICO MEZZI ---");
-            System.out.println("1. Mostra storico completo mezzo");
-            System.out.println("2. Mostra manutenzioni mezzo");
-            System.out.println("3. Mostra periodo attivo attuale");
-            System.out.println("0. Torna indietro");
+            System.out.println("STORICO MEZZI ");
+            System.out.println("1 Mostra mezzi in manutenzione");
+            System.out.println("2 Mostra mezzi in servizio");
+            System.out.println("3 Storico mezzi");
+            System.out.println("0 Torna indietro");
 
             sceltaStorico = leggiIntero(scanner, "Scelta: ");
 
             try {
                 switch (sceltaStorico) {
                     case 1:
-                        System.out.print("Inserisci codice mezzo: ");
-                        String codiceStorico = scanner.nextLine().trim().toUpperCase();
-
-                        Mezzo mezzoStorico = mezzoDAO.findByCodice(codiceStorico);
-                        if (mezzoStorico == null) {
-                            System.out.println("Mezzo non trovato.");
-                            break;
-                        }
-
-                        List<PeriodoStatoMezzo> storico = periodoDAO.trovaStoricoPerMezzo(mezzoStorico.getId().toString());
-                        if (storico.isEmpty()) {
-                            System.out.println("Nessuno storico trovato.");
+                        List<PeriodoStatoMezzo> mezziInManutenzione = periodoDAO.trovaMezziinManutenzione();
+                        if (mezziInManutenzione.isEmpty()) {
+                            System.out.println("Nessun mezzo attualmente in manutenzione.");
                         } else {
-                            storico.forEach(System.out::println);
+                            System.out.println("Mezzi in manutenzione");
+                            mezziInManutenzione.forEach(p ->
+                                    System.out.println("Codice: " + p.getMezzo().getCodiceMezzo() + " // Tipo: " + p.getMezzo().getTipoMezzo() + " // Dal: " + p.getDataInizio()));
                         }
                         break;
 
                     case 2:
-                        System.out.print("Inserisci codice mezzo: ");
-                        String codiceManut = scanner.nextLine().trim().toUpperCase();
-
-                        Mezzo mezzoManut = mezzoDAO.findByCodice(codiceManut);
-                        if (mezzoManut == null) {
-                            System.out.println("Mezzo non trovato.");
-                            break;
-                        }
-
-                        List<PeriodoStatoMezzo> manutenzioni = periodoDAO.trovaManutenzioniPerMezzo(mezzoManut.getId().toString());
-                        if (manutenzioni.isEmpty()) {
-                            System.out.println("Nessun periodo di manutenzione trovato.");
+                        List<PeriodoStatoMezzo> mezziInServizio = periodoDAO.trovaMezziinServizio();
+                        if (mezziInServizio.isEmpty()) {
+                            System.out.println("Nessun mezzo attualmente in servizio.");
                         } else {
-                            manutenzioni.forEach(System.out::println);
+                            System.out.println("Mezzi in servizio:");
+                            mezziInServizio.forEach(p ->
+                                    System.out.println("Codice: " + p.getMezzo().getCodiceMezzo() + " // Tipo: " + p.getMezzo().getTipoMezzo() + " // Dal: " + p.getDataInizio()));
                         }
                         break;
 
                     case 3:
-                        System.out.print("Inserisci codice mezzo: ");
-                        String codiceAttivo = scanner.nextLine().trim().toUpperCase();
-
-                        Mezzo mezzoAttivo = mezzoDAO.findByCodice(codiceAttivo);
-                        if (mezzoAttivo == null) {
-                            System.out.println("Mezzo non trovato.");
-                            break;
-                        }
-
-                        PeriodoStatoMezzo periodoAttivo = periodoDAO.trovaPeriodoAttivoPerMezzo(mezzoAttivo.getId().toString());
-                        if (periodoAttivo == null) {
-                            System.out.println("Nessun periodo attivo trovato.");
+                        List<PeriodoStatoMezzo> storico = periodoDAO.trovaStoricoMezzi();
+                        if (storico.isEmpty()) {
+                            System.out.println("Nessun mezzo trovato.");
                         } else {
-                            System.out.println(periodoAttivo);
+                            System.out.println("storico dei mezzi:");
+                            storico.forEach(p ->
+                                    System.out.println("Codice: " + p.getMezzo().getCodiceMezzo() + " // Stato: " + p.getStato() + " // Inizio: " + p.getDataInizio() + " // Fine: " + p.getDataFine()));
                         }
                         break;
 
                     case 0:
-                        System.out.println("Ritorno al menu precedente.");
+                        System.out.println("Torna indietro");
                         break;
 
                     default:

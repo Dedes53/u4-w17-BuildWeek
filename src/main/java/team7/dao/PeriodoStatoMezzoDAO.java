@@ -2,6 +2,7 @@ package team7.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import team7.entities.Mezzo;
 import team7.entities.PeriodoStatoMezzo;
 import team7.enumm.StatoMezzo;
 
@@ -57,26 +58,39 @@ public class PeriodoStatoMezzoDAO {
         return risultati.get(0);
     }
 
-    // cancella tutto lo storico di un singolo mezzo
-    public void deleteByMezzoId(String mezzoId) {
-        EntityTransaction transaction = em.getTransaction();
-        transaction.begin();
-
-        em.createQuery(
-                        "DELETE FROM PeriodoStatoMezzo p WHERE p.mezzo.id = :mezzoId"
-                ).setParameter("mezzoId", UUID.fromString(mezzoId))
-                .executeUpdate();
-
-        transaction.commit();
+    public List<PeriodoStatoMezzo> trovaMezziinManutenzione() {
+        return em.createQuery(
+                        "SELECT p FROM PeriodoStatoMezzo p " +
+                                "WHERE p.stato = :stato AND p.dataFine IS NULL " +
+                                "ORDER BY p.dataInizio",
+                        PeriodoStatoMezzo.class
+                ).setParameter("stato", StatoMezzo.IN_MANUTENZIONE)
+                .getResultList();
     }
 
-    // cancella tutto lo storico di tutti i mezzi
-    public void deleteAll() {
-        EntityTransaction transaction = em.getTransaction();
-        transaction.begin();
-
-        em.createQuery("DELETE FROM PeriodoStatoMezzo").executeUpdate();
-
-        transaction.commit();
+    public List<PeriodoStatoMezzo> trovaMezziinServizio() {
+        return em.createQuery(
+                        "SELECT p FROM PeriodoStatoMezzo p " +
+                                "WHERE p.stato = :stato AND p.dataFine IS NULL " +
+                                "ORDER BY p.dataInizio",
+                        PeriodoStatoMezzo.class
+                ).setParameter("stato", StatoMezzo.IN_SERVIZIO)   // oppure ATTIVO, in base al tuo enum
+                .getResultList();
     }
+
+    public List<PeriodoStatoMezzo> trovaStoricoMezzi() {
+        return em.createQuery(
+                        "SELECT p FROM PeriodoStatoMezzo p " +
+                                "WHERE p.mezzo.id IN (" +
+                                "   SELECT DISTINCT pm.mezzo.id FROM PeriodoStatoMezzo pm " +
+                                "   WHERE pm.stato = :statoManutenzione" +
+                                ") " +
+                                "AND p.mezzo.statoAttuale = :statoAttuale " +
+                                "ORDER BY p.mezzo.codiceMezzo, p.dataInizio", PeriodoStatoMezzo.class)
+                .setParameter("statoManutenzione", StatoMezzo.IN_MANUTENZIONE)
+                .setParameter("statoAttuale", StatoMezzo.IN_SERVIZIO)   // oppure ATTIVO
+                .getResultList();
+    }
+
+
 }
