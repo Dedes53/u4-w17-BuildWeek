@@ -704,7 +704,7 @@ public class Application {
         int sceltaMezzo;
 
         do {
-            System.out.println("\n--- GESTIONE MEZZI ---");
+            System.out.println(" GESTIONE MEZZI ");
             System.out.println("1. Salva mezzo");
             System.out.println("2. Cerca mezzo per codice");
             System.out.println("3. Cambia stato mezzo");

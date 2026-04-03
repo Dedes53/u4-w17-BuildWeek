@@ -50,7 +50,7 @@ public class PercorrenzaDAO {
     }
     // calcola tempo medio
     public Double CalcolaTempoMedio(String trattaId) {
-        TypedQuery<Double> query = em.createQuery("SELECT AVG(p.tempoEffettivoPercorrenza) FROM Percorrenza p WHERE p.tratta.id = :trattaId", Double.class);
+        TypedQuery<Double> query = em.createQuery("SELECT AVG(p.tempoEffettivoMinuti) FROM Percorrenza p WHERE p.tratta.id = :trattaId", Double.class);
         query.setParameter("trattaId", UUID.fromString(trattaId));
         return query.getSingleResult();
     }
@@ -67,6 +67,5 @@ public class PercorrenzaDAO {
         TypedQuery<Double> query = em.createQuery("SELECT (p.tempoEffettivoPercorrenza - p.dataOraPartenza ) FROM Percorrenza p WHERE p.id=:id ", Double.class);
         query.setParameter("id",idP);
         return query.getSingleResult();
-
     }
 }

@@ -61,7 +61,7 @@ public Tratta cancellaTratta(String id) {
 // questa dovrebbe fa il conteggio delle volte che si percorre una tratta
 
 public long ContaVolteperTratta(Tratta tratta){
-    TypedQuery<Long> query = em.createQuery("SELECT COUNT(t) FROM Percorrenza p WHERE p.tratta =:tratta", Long.class);
+    TypedQuery<Long> query = em.createQuery("SELECT COUNT(p) FROM Percorrenza p WHERE p.tratta =:tratta", Long.class);
     query.setParameter("tratta",tratta);
     return query.getSingleResult();
 }

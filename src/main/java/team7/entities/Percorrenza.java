@@ -28,26 +28,25 @@ public class Percorrenza {
     private LocalDateTime dataOraArrivo;
 
     @Column(name = "tempo_effettivo")
-    private Duration tempoEffettivoPercorrenza;
+    private int tempoEffettivoPercorrenza;
 
 
     public Percorrenza() {}
-
     public Percorrenza(Mezzo mezzo, Tratta tratta, LocalDateTime partenza, LocalDateTime arrivo) {
         this.mezzo = mezzo;
         this.tratta = tratta;
         this.dataOraPartenza = partenza;
         this.dataOraArrivo = arrivo;
-        this.tempoEffettivoPercorrenza = Duration.between(partenza, arrivo);
+        this.tempoEffettivoPercorrenza =(int) Duration.between(partenza, arrivo).toMinutes();
     }
 
     // per ritardi o antticipi
     public String getScostamentoRispettoAlPrevisto() {
-        Duration prevista = tratta.getDurata();
-        long differenzaMinuti = tempoEffettivoPercorrenza.minus(prevista).toMinutes();
+        int prevista = tratta.getDurata();
+        int differenza = tempoEffettivoPercorrenza - prevista;
 
-        if (differenzaMinuti > 0) return "Ritardo di " + differenzaMinuti + " min";
-        if (differenzaMinuti < 0) return "Anticipo di " + Math.abs(differenzaMinuti) + " min";
+        if (differenza > 0) return "Ritardo di " + differenza + " min";
+        if (differenza < 0) return "Anticipo di " + Math.abs(differenza) + " min";
         return "In orario";
     }
 //getter
@@ -72,7 +71,7 @@ public class Percorrenza {
         return dataOraArrivo;
     }
 
-    public Duration getTempoEffettivoPercorrenza() {
+    public int getTempoEffettivoPercorrenza() {
         return tempoEffettivoPercorrenza;
     }
 
@@ -93,7 +92,7 @@ public class Percorrenza {
         this.dataOraArrivo = dataOraArrivo;
     }
 
-    public void setTempoEffettivoPercorrenza(Duration tempoEffettivoPercorrenza) {
+    public void setTempoEffettivoPercorrenza(int tempoEffettivoPercorrenza) {
         this.tempoEffettivoPercorrenza = tempoEffettivoPercorrenza;
     }
 

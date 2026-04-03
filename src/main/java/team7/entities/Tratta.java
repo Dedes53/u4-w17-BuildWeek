@@ -1,36 +1,41 @@
 package team7.entities;
+
 import jakarta.persistence.*;
 
-import java.time.*;
 import java.util.UUID;
 
 @Entity
 @Table(name = "tratta")
 public class Tratta {
+
     @Id
     @GeneratedValue
     private UUID id;
-    @Column(name="zona_partenza")
+
+    @Column(name = "zona_partenza")
     private String zonaPartenza;
-    @Column(name="zona_arrivo")
+
+    @Column(name = "zona_arrivo")
     private String zonaFinale;
-    @Column(name="durata")
-    private Duration durata;
 
-    public Tratta(){}
+    @Column(name = "durata")
+    private int durata;
 
-    public Tratta( String zonaPartenza, String zonaFinale, int minuti) {
+    public Tratta() {}
+
+    public Tratta(String zonaPartenza, String zonaFinale, int minuti) {
         this.zonaPartenza = zonaPartenza;
         this.zonaFinale = zonaFinale;
-        this.durata = Duration.ofMinutes(minuti);
-
+        this.durata = minuti;
     }
-public String getTempoPercorrenzaFormattato(){
-    long ore = durata.toHours();
-    int minuti = durata.toMinutesPart();
-    return ore + "h " + minuti + "m";
-}
-//getter
+
+    public String getTempoPercorrenzaFormattato() {
+        int ore = durata / 60;
+        int minuti = durata % 60;
+        return ore + "h " + minuti + "m";
+    }
+
+    // getter
     public UUID getId() {
         return id;
     }
@@ -39,15 +44,15 @@ public String getTempoPercorrenzaFormattato(){
         return zonaPartenza;
     }
 
-    public Duration getDurata() {
-        return durata;
-    }
-
     public String getZonaFinale() {
         return zonaFinale;
     }
-    //setter
 
+    public int getDurata() {
+        return durata;
+    }
+
+    // setter
     public void setZonaPartenza(String zonaPartenza) {
         this.zonaPartenza = zonaPartenza;
     }
@@ -56,7 +61,7 @@ public String getTempoPercorrenzaFormattato(){
         this.zonaFinale = zonaFinale;
     }
 
-    public void setDurata(Duration durata) {
+    public void setDurata(int durata) {
         this.durata = durata;
     }
 
@@ -66,7 +71,7 @@ public String getTempoPercorrenzaFormattato(){
                 "id=" + id +
                 ", zonaPartenza='" + zonaPartenza + '\'' +
                 ", zonaFinale='" + zonaFinale + '\'' +
-                ", durata=" + durata +
+                ", durata=" + durata + " min" +
                 '}';
     }
 }
