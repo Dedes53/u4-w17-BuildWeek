@@ -58,6 +58,11 @@ public class BigliettoDAO {
     public List<Biglietto> findByRivenditore(Rivenditore rivenditore) {
         return em.createQuery("SELECT a FROM Biglietto a WHERE a.rivenditore = :r", Biglietto.class).setParameter("r", rivenditore).getResultList();
     }
-
-
+    public List<Biglietto> findByMezzoVidimazione(Long mezzoId) {
+        return em.createQuery("SELECT b FROM Biglietto b WHERE b.vidimato = true AND b.mezzoVidimazione.id = :IDmezzo", Biglietto.class).setParameter("IDmezzo", mezzoId).getResultList();
+    }
+    public List<Biglietto> findByCodiceMezzo(String codice) {
+        return em.createQuery(
+                        "SELECT b FROM Biglietto b WHERE b.vidimato = true AND b.mezzoVidimazione.codice = :codice", Biglietto.class).setParameter("codice", codice).getResultList();
+    }
 }

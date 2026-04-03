@@ -51,8 +51,8 @@ public class Biglietto extends TitoloViaggio {
         this.mezzoVidimazione = mezzoVidimazione;
     }
 
-    public void vidimazione(Mezzo mezzo, LocalDate dataVidimazione) {
-        this.dataDiVidimazione = dataDiVidimazione;
+    public void vidimazione(Mezzo mezzo, LocalDateTime dataVidimazione) {
+        this.dataDiVidimazione = dataVidimazione;
         this.mezzoVidimazione = mezzo;
         this.vidimato = true;
     }

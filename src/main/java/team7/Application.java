@@ -25,6 +25,11 @@ public class Application {
     public static void main(String[] args) {
         EntityManager em = emf.createEntityManager();
 
+        //DAO Titoli di viaggio
+
+        BigliettoDAO bigliettoDAO = new BigliettoDAO(em);
+        AbbonamentoDAO abbonamentoDAO = new AbbonamentoDAO(em);
+
         // DAO mezzi e storico
         MezzoDAO mezzoDAO = new MezzoDAO(em);
         PeriodoStatoMezzoDAO periodoDAO = new PeriodoStatoMezzoDAO(em);
@@ -397,7 +402,7 @@ public class Application {
                                 System.out.println("3  Salva percorrenza");
                                 System.out.println("4  Salva rivenditore");
                                 System.out.println("5  Totale biglietti/abbonamenti emessi per tempo");
-                                System.out.println("6  Totale biglietti/abbonamenti emessi per mezzo");
+                                System.out.println("6  Totale biglietti vidimati per mezzo");
                                 System.out.println("7  Storico manutenzione");
                                 System.out.println("8  Calcola il tempo medio effettivo di percorrenza di una tratta da parte di un mezzo");
                                 System.out.println("9  Gestione mezzi");
@@ -424,13 +429,52 @@ public class Application {
                                         break;
 
                                     case 5:
-                                        System.out.println("Funzionalità non ancora implementata.");
+                                        try {
+                                            System.out.println("Vuoi controllare i biglietti o gli abbonamenti?");
+                                            String tipo = scanner.nextLine().trim().toLowerCase();
+
+                                            System.out.println("Inserisci data inizio ANNO-MESE-GIORNO");
+                                            LocalDate inizio = LocalDate.parse(scanner.nextLine().trim());
+
+                                            System.out.println("Inserisci data fine ANNO-MESE-GIORNO");
+                                            LocalDate fine = LocalDate.parse(scanner.nextLine().trim());
+
+                                            if (tipo.equals("biglietti")) {
+
+                                                Long totaleBiglietti = bigliettoDAO.countBigliettiPerPeriodo(inizio, fine);
+                                                System.out.println("Totale biglietti emessi nel periodo " + inizio +"-" + fine +":" + totaleBiglietti);
+
+                                            } else if (tipo.equals("abbonamenti")) {
+
+                                                Long totaleAbbonamenti = abbonamentoDAO.countAbbonamentiPeriodo(inizio, fine);
+                                                System.out.println("Totale abbonamenti emessi nel periodo " + inizio +"-" + fine +":" +
+                                                        totaleAbbonamenti);
+
+                                            } else {
+                                                System.out.println("Scelta non valida, controlla di aver scritto 'biglietto' o 'abbonamento'.");
+                                            }
+
+                                        } catch (Exception e) {
+                                            System.out.println("Errore: " + e.getMessage());
+                                        }
                                         break;
 
                                     case 6:
-                                        System.out.println("Funzionalità non ancora implementata.");
-                                        break;
+                                        try {
+                                            System.out.println("Inserisci il codice del mezzo:");
+                                            String codice = scanner.nextLine().trim();
+                                            List<Biglietto> biglietti = bigliettoDAO.findByCodiceMezzo(codice);
 
+                                            if (biglietti.isEmpty()) {
+                                                System.out.println("Nessun biglietto vidimato su questo mezzo.");
+                                            } else {
+                                                System.out.println("Biglietti vidimati sul mezzo " + codice + ":");
+                                                biglietti.forEach(System.out::println);
+                                                }
+                                        } catch (Exception e) {
+                                            System.out.println("Errore: " + e.getMessage());
+                                        }
+                                        break;
                                     case 7:
                                         menuStoricoMezzi(scanner, mezzoDAO, periodoDAO);
                                         break;
@@ -899,23 +943,23 @@ public class Application {
 
         } while (sceltaStorico != 0);
     }
-
-    static void compraBiglietto() {
-        Scanner s = new Scanner(System.in);
-
-        for (int i = 0; i < rivenditori.size(); i++) {
-            System.out.println((i + 1) + " - " + rivenditori.get(i).getNomeAttivita());
-        }
-        int riv = s.nextInt();
-        Rivenditore r = switch (riv) {
-            case 1 -> rivenditori.get(riv - 1);
-            case 2 -> r2;
-            case 3 -> r3;
-            case 4 -> r4;
-            case 5 -> r1; //trovare il modod di tornare indietro
-            default -> null;
-        };
-        if (r == null) System.out.println("Valore inserito non riconosciuto, si prega di riprovare");
-    }
-
 }
+//    static void compraBiglietto() {
+//        Scanner s = new Scanner(System.in);
+//
+//        for (int i = 0; i < rivenditori.size(); i++) {
+//            System.out.println((i + 1) + " - " + rivenditori.get(i).getNomeAttivita());
+//        }
+//        int riv = s.nextInt();
+//        Rivenditore r = switch (riv) {
+/// /            case 1 -> rivenditori.get(riv - 1);
+/// /            case 2 -> r2;
+/// /            case 3 -> r3;
+/// /            case 4 -> r4;
+/// /            case 5 -> r1; //trovare il modod di tornare indietro
+/// /            default -> null;
+//        };
+//        if (r == null) System.out.println("Valore inserito non riconosciuto, si prega di riprovare");
+//    }
+//
+//
