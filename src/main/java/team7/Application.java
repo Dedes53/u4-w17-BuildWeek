@@ -169,10 +169,11 @@ public class Application {
                 System.out.println("1 Registrati");
                 System.out.println("2 Compra Biglietto");
                 System.out.println("3 Compra Abbonamento");
-                System.out.println("4 Valida Abbonamento");
-                System.out.println("5 Tratte");
-                System.out.println("6 Percorrenze");
-                System.out.println("7 Controllo amministratore");
+                System.out.println("4 Validità Abbonamento");
+                System.out.println("5 Crea tessera");
+                System.out.println("6 Tratte");
+                System.out.println("7 Percorrenze");
+                System.out.println("8 Controllo amministratore");
                 System.out.println("0 Esci");
 
                 scelta = parseInt(scanner.nextLine());
@@ -205,8 +206,12 @@ public class Application {
                         // verifico validita abbonamento
                         verificoValidita(em, utenteDAO);
                         break;
-
                     case 5:
+                        System.out.println("Prego si inserisca il nome utente per cui si vuole creare una nuova tessera");
+                        String nomeUtente = scanner.nextLine().trim();
+                        System.out.println("Nuova tessera emessa: " + creaNuovaTesseraScanner(nomeUtente, utenteDAO));
+                        break;
+                    case 6:
                         System.out.println("Menu delle Tratte ");
                         System.out.println("1 Trova tratta per id");
                         System.out.println("2 Mostra tutte le tratte");
@@ -245,7 +250,7 @@ public class Application {
                                 System.out.println("Errore....Scelta sbagliata");
                         }
                         break;
-                    case 6:
+                    case 7:
                         System.out.println("Menu delle Percorrenze ");
                         System.out.println("1 Trova percorrenze per tratta  ");
                         System.out.println("2 Trova percorrenze per mezzo");
@@ -351,7 +356,7 @@ public class Application {
                         }
                         break;
 
-                    case 7:
+                    case 8:
                         int passcode = 5432;
                         int pass = leggiIntero(scanner, "Inserisci il passcode: ");
 
@@ -897,7 +902,7 @@ public class Application {
         //potrei sostituirlo con un metodo selRivenditore()
         System.out.println("Seleziona uno dei seguenti rivenditori:");
         for (int i = 0; i < rivenditori.size(); i++) {
-            System.out.println((i + 1) + " - " + rivenditori.get(i).getNomeAttivita() + "\n");
+            System.out.println((i + 1) + " - " + rivenditori.get(i).getNomeAttivita());
         }
         int riv = s.nextInt();
         if (riv < 1 || riv > rivenditori.size()) {
@@ -914,7 +919,7 @@ public class Application {
         System.out.println("Seleziona uno dei seguenti rivenditori:");
         //scelta del rivenditore
         for (int i = 0; i < rivenditori.size(); i++) {
-            System.out.println((i + 1) + " - " + rivenditori.get(i).getNomeAttivita() + "\n");
+            System.out.println((i + 1) + " - " + rivenditori.get(i).getNomeAttivita());
         }
 
         int riv = s.nextInt();
@@ -968,5 +973,15 @@ public class Application {
         else
             System.out.println("Ci dispiace, ma il tuo abbonamento è scaduto in data " + a.getDataFine());
     }
+
+    static public Tessera creaNuovaTesseraScanner(String nomeUtente, UtenteDAO utenteDAO) {
+        Utente u = em.createQuery("select u from Utente u where concat(u.nome, ' ', u.cognome) like :nomeInserito", Utente.class)
+                .setParameter("nomeInserito", "%" + nomeUtente + "%").getSingleResult();
+        Tessera t = new Tessera(u);
+        u.setTessera(t);
+        utenteDAO.saveTessera(t);
+        return t;
+    }
+
 }
 
