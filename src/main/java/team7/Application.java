@@ -207,8 +207,7 @@ public class Application {
                         System.out.println("Menu delle Tratte ");
                         System.out.println("1 Trova tratta per id");
                         System.out.println("2 Mostra tutte le tratte");
-                        System.out.println("3 Cancella tratta per id ");
-                        System.out.println("4 Conta quante volte quella tratta e' stata percorsa");
+                        System.out.println("3 Conta quante volte quella tratta e' stata percorsa");
 
                         int sceltaTratta = parseInt(scanner.nextLine());
                         switch (sceltaTratta) {
@@ -229,16 +228,6 @@ public class Application {
                                 break;
                             case 3:
                                 try {
-                                    System.out.println("Inserisci id della tratta per cancellarla:");
-                                    String idtrattaD = scanner.nextLine();
-                                    Tratta trovato = trattaDAO.cancellaTratta(idtrattaD);
-                                    System.out.println(trovato);
-                                } catch (NonTrovato e) {
-                                    System.out.println("Errore: tratta non trovata!" + e.getMessage());
-                                }
-                                break;
-                            case 4:
-                                try {
                                     System.out.println("Inserisci ID tratta da contare:");
                                     String idDaContare = scanner.nextLine();
                                     Tratta trattaDaContare = trattaDAO.trovaPerID(idDaContare);
@@ -248,6 +237,7 @@ public class Application {
                                     System.out.println("Errore: tratta non trovata!" + e.getMessage());
                                 }
                                 break;
+
                             default:
                                 System.out.println("Errore....Scelta sbagliata");
                         }
@@ -371,7 +361,6 @@ public class Application {
                             int sceltaInserimento;
                             do {
                                 System.out.println("\nMENU INSERIMENTO");
-                                System.out.println("1  Salva mezzo");
                                 System.out.println("2  Salva tratta");
                                 System.out.println("3  Salva percorrenza");
                                 System.out.println("4  Salva rivenditore");
@@ -380,16 +369,12 @@ public class Application {
                                 System.out.println("7  Storico manutenzione");
                                 System.out.println("8  Calcola il tempo medio effettivo di percorrenza di una tratta da parte di un mezzo");
                                 System.out.println("9  Gestione mezzi");
-                                System.out.println("10 Storico mezzi");
+                                System.out.println("10 Cancella tratta per id");
                                 System.out.println("0  Torna indietro");
 
                                 sceltaInserimento = leggiIntero(scanner, "Scelta: ");
 
                                 switch (sceltaInserimento) {
-                                    case 1:
-                                        salvaMezzoDaScanner(scanner, mezzoDAO);
-                                        break;
-
                                     case 2:
                                         salvaTrattaDaScanner(scanner, trattaDAO);
                                         break;
@@ -463,9 +448,15 @@ public class Application {
                                         break;
 
                                     case 10:
-                                        menuStoricoMezzi(scanner, mezzoDAO, periodoDAO);
+                                        try {
+                                            System.out.println("Inserisci id della tratta per cancellarla:");
+                                            String idtrattaD = scanner.nextLine();
+                                            Tratta trovato = trattaDAO.cancellaTratta(idtrattaD);
+                                            System.out.println(trovato);
+                                        } catch (NonTrovato e) {
+                                            System.out.println("Errore: tratta non trovata!" + e.getMessage());
+                                        }
                                         break;
-
                                     case 0:
                                         System.out.println("Ritorno al menu principale.");
                                         break;
