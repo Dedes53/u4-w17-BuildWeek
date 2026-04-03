@@ -22,11 +22,13 @@ import java.util.UUID;
 import static java.lang.Integer.parseInt;
 
 public class Application {
+
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("team7");
     private static final List<Rivenditore> rivenditori = new ArrayList<>();
-    // EntityManagerFactory emf = Persistence.createEntityManagerFactory("team7");
+
     static EntityManager em = emf.createEntityManager();
-    // DAO rivenditori e utenti
+
+    // DAO
     static UtenteDAO utenteDAO = new UtenteDAO(em);
     static RivenditoreDAO rivenditoreDAO = new RivenditoreDAO(em);
     static BigliettoDAO bigliettoDAO = new BigliettoDAO(em);
@@ -37,6 +39,7 @@ public class Application {
     static PercorrenzaDAO percorrenzaDAO = new PercorrenzaDAO(em);
     static Utente u3 = new Utente("Massimo", "Bianchi"); // per test metodo crea abbonamento
 
+    
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
