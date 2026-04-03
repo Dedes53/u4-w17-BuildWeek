@@ -398,16 +398,16 @@ public class Application {
                                             System.out.println("Vuoi controllare i biglietti o gli abbonamenti?");
                                             String tipo = scanner.nextLine().trim().toLowerCase();
 
-                                            System.out.println("Inserisci data inizio ANNO-MESE-GIORNO");
+                                            System.out.println("Inserisci data inizio yyyy-mm-dd");
                                             LocalDate inizio = LocalDate.parse(scanner.nextLine().trim());
 
-                                            System.out.println("Inserisci data fine ANNO-MESE-GIORNO");
+                                            System.out.println("Inserisci data fine yyyy-mm-dd");
                                             LocalDate fine = LocalDate.parse(scanner.nextLine().trim());
 
                                             if (tipo.equals("biglietti")) {
 
                                                 Long totaleBiglietti = bigliettoDAO.countBigliettiPerPeriodo(inizio, fine);
-                                                System.out.println("Totale biglietti emessi nel periodo " + inizio + "-" + fine + ":" + totaleBiglietti);
+                                                System.out.println("Totale biglietti emessi nel periodo " + inizio + "-" + fine + ": " + totaleBiglietti);
 
                                             } else if (tipo.equals("abbonamenti")) {
 
@@ -956,11 +956,11 @@ public class Application {
 
     static void verificoValidita(EntityManager em, UtenteDAO utenteDAO) {
 
-            Scanner s = new Scanner(System.in);
-            System.out.println("Per verificare se il tuo abbonamento è ancora valido, devi accedere al tuo profilo utente.\n" +
-                    "Inserisci di seguito il nome del profilo utente");
+        Scanner s = new Scanner(System.in);
+        System.out.println("Per verificare se il tuo abbonamento è ancora valido, devi accedere al tuo profilo utente.\n" +
+                "Inserisci di seguito il nome del profilo utente");
 
-            String nomeUtente = s.nextLine().trim();
+        String nomeUtente = s.nextLine().trim();
         try {
             Utente u = em.createQuery("select u from Utente u where concat(u.nome, ' ', u.cognome) like :nomeInserito", Utente.class)
                     .setParameter("nomeInserito", "%" + nomeUtente + "%").getSingleResult();
@@ -972,15 +972,13 @@ public class Application {
             }
 
 
-                if (a.getDataFine().isAfter(LocalDate.now())){
-                    System.out.println("Il tuo abbonamento è ancora valido, scadrà in data " + a.getDataFine());
-                }
+            if (a.getDataFine().isAfter(LocalDate.now())) {
+                System.out.println("Il tuo abbonamento è ancora valido, scadrà in data " + a.getDataFine());
+            } else {
+                System.out.println("Ci dispiace, ma il tuo abbonamento è scaduto in data " + a.getDataFine());
+            }
 
-                 else{
-                     System.out.println("Ci dispiace, ma il tuo abbonamento è scaduto in data " + a.getDataFine());
-                }
-
-        } catch(NoResultException e){
+        } catch (NoResultException e) {
             System.out.println("non è stato trovato alcun utente con quel nome.");
         } catch (Exception e) {
             System.out.println("ma non e' stato trovato nulla " + e.getMessage());
@@ -1007,10 +1005,9 @@ public class Application {
         } catch (NonUniqueResultException e) {
             System.out.println("Più utenti trovati corrispondenti a questo nome, sii più preciso.");
             return null;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("la creazione della tessera non e' andata a buon fine" + e.getMessage());
-        return null;
+            return null;
         }
     }
 
