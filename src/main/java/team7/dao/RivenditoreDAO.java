@@ -3,7 +3,6 @@ package team7.dao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.NamedQuery;
 import team7.entities.*;
 import team7.enumm.TipoAbbonamento;
 
@@ -11,14 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-@NamedQuery(
-        name = "distributori_automatici_attivi",
-        query = "select d from DistributoreAutomatico d where d.attivo=true"
-)
-@NamedQuery(
-        name = "distributori_automatici_disattivati",
-        query = "select d from DistributoreAutomatico d where d.attivo=false"
-)
+
 public class RivenditoreDAO {
 
     private static EntityManagerFactory emf;

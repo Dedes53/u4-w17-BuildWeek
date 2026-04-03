@@ -1,13 +1,14 @@
 package team7.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import team7.enumm.TipoAbbonamento;
 
 import java.time.LocalDate;
 
+@NamedQuery(
+        name = "abbonamento_attivo_utente",
+        query = "select a from Abbonamento a where a.tessera.utente.id = :utenteId and a.dataFine >= :oggi"
+)
 @Entity
 public class Abbonamento extends TitoloViaggio {
 

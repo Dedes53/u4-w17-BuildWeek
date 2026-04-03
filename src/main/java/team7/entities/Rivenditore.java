@@ -7,6 +7,14 @@ import java.util.UUID;
 @Entity
 @Table(name = "rivenditori")
 @Inheritance(strategy = InheritanceType.JOINED)
+@NamedQuery(
+        name = "distributori_automatici_attivi",
+        query = "select d from DistributoreAutomatico d where d.attivo=true"
+)
+@NamedQuery(
+        name = "distributori_automatici_disattivati",
+        query = "select d from DistributoreAutomatico d where d.attivo=false"
+)
 public abstract class Rivenditore {
 
     //  attibuti
@@ -57,5 +65,5 @@ public abstract class Rivenditore {
         String uuidCorto = this.rivenditoreId.toString().substring(0, 8);
         return String.format("RIV-%s-%05d", uuidCorto, this.contatoreTitoli);
     }
-    
+
 }

@@ -15,7 +15,7 @@ public class Tessera {
     @Column(name = "data_scadenza")
     private LocalDate dataDiScadenza;
 
-    @ManyToOne
+    @OneToOne
     private Utente utente;
 
     //   costruttori

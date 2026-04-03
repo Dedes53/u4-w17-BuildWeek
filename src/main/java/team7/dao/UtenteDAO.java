@@ -3,7 +3,6 @@ package team7.dao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.NamedQuery;
 import team7.entities.Abbonamento;
 import team7.entities.Tessera;
 import team7.entities.Utente;
@@ -12,10 +11,7 @@ import team7.exeption.NonTrovato;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@NamedQuery(
-        name = "abbonamento_attivo_utente",
-        query = "select a from Abbonamento a where a.tessera.utente.id = :utenteId and a.dataFine >= :oggi"
-)
+
 public class UtenteDAO {
 
     private static EntityManagerFactory emf;
@@ -26,9 +22,8 @@ public class UtenteDAO {
     }
 
     //   metodi di Utente
-    public static Abbonamento controllaAbbonamento(Utente u) {
+    public Abbonamento controllaAbbonamento(Utente u) {
         //utente -> Tessera -> Abbonamento
-        EntityManager em = emf.createEntityManager();
         Abbonamento res = null;
         try {
             res = em.createNamedQuery("abbonamento_attivo_utente", Abbonamento.class)
@@ -78,6 +73,7 @@ public class UtenteDAO {
         try {
             t.begin();
             em.persist(tessera);
+            em.merge(tessera.getUtente());
             t.commit();
             System.out.println("Creazione tessera n." + tessera.getId() + " Per l'utente " + tessera.getUtente().getNome() + " " + tessera.getUtente().getCognome());
         } catch (Exception e) {
@@ -87,6 +83,7 @@ public class UtenteDAO {
 
     public Tessera creaNuovaTessera(Utente u) {
         Tessera t = new Tessera(u);
+        u.setTessera(t);
         this.saveTessera(t);
         return t;
     }
