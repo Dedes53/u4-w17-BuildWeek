@@ -81,10 +81,5 @@ public class UtenteDAO {
         }
     }
 
-    public Tessera creaNuovaTessera(Utente u) {
-        Tessera t = new Tessera(u);
-        u.setTessera(t);
-        this.saveTessera(t);
-        return t;
-    }
+    
 }

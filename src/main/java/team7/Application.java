@@ -40,7 +40,7 @@ public class Application {
     static PercorrenzaDAO percorrenzaDAO = new PercorrenzaDAO(em);
     static Utente u3 = new Utente("Massimo", "Bianchi"); // per test metodo crea abbonamento
 
-    
+
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
@@ -52,16 +52,16 @@ public class Application {
 
 
         // DA COMMENTARE DOPO PRIMO AVVIO
-        utenteDAO.save(u1);
-        utenteDAO.save(u2);
-        utenteDAO.save(u3);
+//        utenteDAO.save(u1);
+//        utenteDAO.save(u2);
+//        utenteDAO.save(u3);
 
 
         // DA COMMENTARE DOPO PRIMO AVVIO
-        Tessera t1 = utenteDAO.creaNuovaTessera(u1); //tessera Mario Rossi (valida)
-        Tessera t2 = utenteDAO.creaNuovaTessera(u2); //tessera Maurizio Verdi (scaduta)
-        t2.setDataDiScadenza(LocalDate.of(2025, 10, 14));
-        utenteDAO.saveTessera(t2);
+//        Tessera t1 = utenteDAO.creaNuovaTessera(u1); //tessera Mario Rossi (valida)
+//        Tessera t2 = utenteDAO.creaNuovaTessera(u2); //tessera Maurizio Verdi (scaduta)
+//        t2.setDataDiScadenza(LocalDate.of(2025, 10, 14));
+//        utenteDAO.saveTessera(t2);
 
 
         Rivenditore r1 = new RivenditoreAutorizzato("Bar Roma");
@@ -70,25 +70,25 @@ public class Application {
         Rivenditore r4 = new DistributoreAutomatico("Automatico FS", true);
 
         // aggiungo i rivenditori alla lista dei rivenditori da utilizzare nei metodi
-        rivenditori.add(r1);
-        rivenditori.add(r2);
-        rivenditori.add(r3);
-        rivenditori.add(r4);
+//        rivenditori.add(r1);
+//        rivenditori.add(r2);
+//        rivenditori.add(r3);
+//        rivenditori.add(r4);
 
 
         // DA COMMENTARE DOPO PRIMO AVVIO
-        rivenditoreDAO.save(r1);
-        rivenditoreDAO.save(r2);
-        rivenditoreDAO.save(r3);
-        rivenditoreDAO.save(r4);
+//        rivenditoreDAO.save(r1);
+//        rivenditoreDAO.save(r2);
+//        rivenditoreDAO.save(r3);
+//        rivenditoreDAO.save(r4);
 
         // DA COMMENTARE DOPO PRIMO AVVIO
-        Biglietto b1 = rivenditoreDAO.emettiBiglietto(r1);
-        Biglietto b2 = rivenditoreDAO.emettiBiglietto(r1);
-        Biglietto b3 = rivenditoreDAO.emettiBiglietto(r2);
-        Biglietto b4 = rivenditoreDAO.emettiBiglietto(r2);
-        Abbonamento a1 = rivenditoreDAO.emettiAbbonamento(r1, TipoAbbonamento.ANNUALE, t1);
-        Abbonamento a6 = rivenditoreDAO.emettiAbbonamento(r2, TipoAbbonamento.SETTIMANALE, t2);
+//        Biglietto b1 = rivenditoreDAO.emettiBiglietto(r1);
+//        Biglietto b2 = rivenditoreDAO.emettiBiglietto(r1);
+//        Biglietto b3 = rivenditoreDAO.emettiBiglietto(r2);
+//        Biglietto b4 = rivenditoreDAO.emettiBiglietto(r2);
+//        Abbonamento a1 = rivenditoreDAO.emettiAbbonamento(r1, TipoAbbonamento.ANNUALE, t1);
+//        Abbonamento a6 = rivenditoreDAO.emettiAbbonamento(r2, TipoAbbonamento.SETTIMANALE, t2);
 
         //tratte
         Tratta tratta1 = new Tratta("Termini", "Ostia Lido", 28);
@@ -98,10 +98,10 @@ public class Application {
 
 
         // DA COMMENTARE DOPO PRIMO AVVIO
-        trattaDAO.salvaTratta(tratta1);
-        trattaDAO.salvaTratta(tratta2);
-        trattaDAO.salvaTratta(tratta3);
-        trattaDAO.salvaTratta(tratta4);
+//        trattaDAO.salvaTratta(tratta1);
+//        trattaDAO.salvaTratta(tratta2);
+//        trattaDAO.salvaTratta(tratta3);
+//        trattaDAO.salvaTratta(tratta4);
 
 
         //percorrenze
@@ -115,12 +115,12 @@ public class Application {
         PeriodoStatoMezzo pm1 = new PeriodoStatoMezzo(mezzo5, StatoMezzo.IN_MANUTENZIONE, LocalDate.of(2024, 12, 25), LocalDate.of(2025, 12, 25));
 
         // DA COMMENTARE DOPO PRIMO AVVIO
-        mezzoDAO.save(mezzo1);
-        mezzoDAO.save(mezzo2);
-        mezzoDAO.save(mezzo3);
-        mezzoDAO.save(mezzo4);
-        mezzoDAO.save(mezzo5);
-        periodoDAO.save(pm1);
+//        mezzoDAO.save(mezzo1);
+//        mezzoDAO.save(mezzo2);
+//        mezzoDAO.save(mezzo3);
+//        mezzoDAO.save(mezzo4);
+//        mezzoDAO.save(mezzo5);
+//        periodoDAO.save(pm1);
 
         // - registra una percorrenza di un mezzo su una tratta
         LocalDateTime datapartenza = LocalDateTime.now();
@@ -139,10 +139,10 @@ public class Application {
 
 
         // DA COMMENTARE DOPO PRIMO AVVIO
-        percorrenzaDAO.salvapERCORRENZA(percorrenza1);
-        percorrenzaDAO.salvapERCORRENZA(percorrenza2);
-        percorrenzaDAO.salvapERCORRENZA(percorrenza3);
-        percorrenzaDAO.salvapERCORRENZA(percorrenza4);
+//        percorrenzaDAO.salvapERCORRENZA(percorrenza1);
+//        percorrenzaDAO.salvapERCORRENZA(percorrenza2);
+//        percorrenzaDAO.salvapERCORRENZA(percorrenza3);
+//        percorrenzaDAO.salvapERCORRENZA(percorrenza4);
 
 
 //        System.out.println("Biglietti dal primo rivenditore");
@@ -170,10 +170,11 @@ public class Application {
                 System.out.println("1 Registrati");
                 System.out.println("2 Compra Biglietto");
                 System.out.println("3 Compra Abbonamento");
-                System.out.println("4 Valida Abbonamento");
-                System.out.println("5 Tratte");
-                System.out.println("6 Percorrenze");
-                System.out.println("7 Controllo amministratore");
+                System.out.println("4 Validità Abbonamento");
+                System.out.println("5 Crea tessera");
+                System.out.println("6 Tratte");
+                System.out.println("7 Percorrenze");
+                System.out.println("8 Controllo amministratore");
                 System.out.println("0 Esci");
 
                 scelta = parseInt(scanner.nextLine());
@@ -206,8 +207,12 @@ public class Application {
                         // verifico validita abbonamento
                         verificoValidita(em, utenteDAO);
                         break;
-
                     case 5:
+                        System.out.println("Prego si inserisca il nome utente per cui si vuole creare una nuova tessera");
+                        String nomeUtente = scanner.nextLine().trim();
+                        System.out.println("Nuova tessera emessa: " + creaNuovaTesseraScanner(nomeUtente, utenteDAO));
+                        break;
+                    case 6:
                         System.out.println("Menu delle Tratte ");
                         System.out.println("1 Trova tratta per id");
                         System.out.println("2 Mostra tutte le tratte");
@@ -246,7 +251,7 @@ public class Application {
                                 System.out.println("Errore....Scelta sbagliata");
                         }
                         break;
-                    case 6:
+                    case 7:
                         System.out.println("Menu delle Percorrenze ");
                         System.out.println("1 Trova percorrenze per tratta  ");
                         System.out.println("2 Trova percorrenze per mezzo");
@@ -352,7 +357,7 @@ public class Application {
                         }
                         break;
 
-                    case 7:
+                    case 8:
                         int passcode = 5432;
                         int pass = leggiIntero(scanner, "Inserisci il passcode: ");
 
@@ -898,7 +903,7 @@ public class Application {
         //potrei sostituirlo con un metodo selRivenditore()
         System.out.println("Seleziona uno dei seguenti rivenditori:");
         for (int i = 0; i < rivenditori.size(); i++) {
-            System.out.println((i + 1) + " - " + rivenditori.get(i).getNomeAttivita() + "\n");
+            System.out.println((i + 1) + " - " + rivenditori.get(i).getNomeAttivita());
         }
         int riv = s.nextInt();
         if (riv < 1 || riv > rivenditori.size()) {
@@ -915,8 +920,9 @@ public class Application {
         System.out.println("Seleziona uno dei seguenti rivenditori:");
         //scelta del rivenditore
         for (int i = 0; i < rivenditori.size(); i++) {
-            System.out.println((i + 1) + " - " + rivenditori.get(i).getNomeAttivita() + "\n");
+            System.out.println((i + 1) + " - " + rivenditori.get(i).getNomeAttivita());
         }
+
         int riv = s.nextInt();
         if (riv < 1 || riv > rivenditori.size()) {
             System.out.println("Valore inserito non riconosciuto, si prega di riprovare");
@@ -984,5 +990,15 @@ public class Application {
         }
 
     }
+
+    static public Tessera creaNuovaTesseraScanner(String nomeUtente, UtenteDAO utenteDAO) {
+        Utente u = em.createQuery("select u from Utente u where concat(u.nome, ' ', u.cognome) like :nomeInserito", Utente.class)
+                .setParameter("nomeInserito", "%" + nomeUtente + "%").getSingleResult();
+        Tessera t = new Tessera(u);
+        u.setTessera(t);
+        utenteDAO.saveTessera(t);
+        return t;
+    }
+
 }
 
