@@ -137,6 +137,9 @@ public class Application {
         Mezzo mezzo5 = new Mezzo("BUS-CAN-05", TipoMezzo.BUS, StatoMezzo.IN_MANUTENZIONE, 40);
         mezzoDAO.save(mezzo5);
 
+        PeriodoStatoMezzo pm1 =new PeriodoStatoMezzo(mezzo5,StatoMezzo.IN_MANUTENZIONE, LocalDate.of(2024, 12, 25), LocalDate.of(2025, 12, 25));
+        periodoDAO.save(pm1);
+
         // - registra una percorrenza di un mezzo su una tratta
         LocalDateTime datapartenza = LocalDateTime.now();
         LocalDateTime dataarrivo = datapartenza.plusMinutes(28);
