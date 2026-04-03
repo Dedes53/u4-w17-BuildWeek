@@ -207,7 +207,7 @@ public class Application {
                     case 5:
                         System.out.println("Prego si inserisca il nome utente per cui si vuole creare una nuova tessera");
                         String nomeUtente = scanner.nextLine().trim();
-                        System.out.println("Nuova tessera emessa: " + creaNuovaTesseraScanner(nomeUtente, utenteDAO));
+                        creaNuovaTesseraScanner(nomeUtente, utenteDAO);
                         break;
                     case 6:
                         System.out.println("Menu delle Tratte ");
@@ -989,22 +989,29 @@ public class Application {
     }
 
     static public Tessera creaNuovaTesseraScanner(String nomeUtente, UtenteDAO utenteDAO) {
-        try{Utente u = em.createQuery("select u from Utente u where concat(u.nome, ' ', u.cognome) like :nomeInserito", Utente.class)
-                .setParameter("nomeInserito", "%" + nomeUtente + "%").getSingleResult();
-            Tessera t = new Tessera(u);
-            u.setTessera(t);
-            utenteDAO.saveTessera(t);
-            return t;
-        } catch (NoResultException e){
-            System.out.println("Non sono stati trovati risultati con questo nome" + e.getMessage());
-        }
-        catch (NonUniqueResultException e){
-            System.out.println("Sono stati trovati più utenti con questo nome " + e.getMessage());
+        try {
+            Utente u = em.createQuery("select u from Utente u where concat(u.nome, ' ', u.cognome) like :nomeInserito", Utente.class)
+                    .setParameter("nomeInserito", "%" + nomeUtente + "%").getSingleResult();
+            if (u.getTessera() != null) {
+                System.out.println("L'utente inserito è già provvisto di tessera");
+                return null;
+            } else {
+                Tessera t = new Tessera(u);
+                u.setTessera(t);
+                utenteDAO.saveTessera(t);
+                return t;
+            }
+        } catch (NoResultException e) {
+            System.out.println("Nome utente non riconosciuto. Potrebbe non esistere o essere stato immesso male. Se credi che esista, riprova");
+            return null;
+        } catch (NonUniqueResultException e) {
+            System.out.println("Più utenti trovati corrispondenti a questo nome, sii più preciso.");
+            return null;
         }
         catch (Exception e) {
             System.out.println("la creazione della tessera non e' andata a buon fine" + e.getMessage());
-        }
         return null;
+        }
     }
 
 }
