@@ -46,6 +46,8 @@ public class PercorrenzaDAO {
 // Trova per perioddo
     public List<Percorrenza> trovaPerPeriodo(LocalDateTime inizio, LocalDateTime fine){
         TypedQuery<Percorrenza> query = em.createQuery("SELECT p FROM Percorrenza p WHERE p.dataOraPartenza >= :inizio AND p.dataOraPartenza <= :fine", Percorrenza.class);
+        query.setParameter("inizio", inizio);
+        query.setParameter("fine", fine);//se mi dimentico di fare il setparameter so coglione
         return query.getResultList();
     }
     // calcola tempo medio
@@ -64,8 +66,13 @@ public class PercorrenzaDAO {
     // calcola tempo tra una percorrenza e l'altra
     //testare
     public Double CalcolaTempotraPercorrenze(UUID idP) {
-        TypedQuery<Double> query = em.createQuery("SELECT (p.tempoEffettivoPercorrenza - p.dataOraPartenza ) FROM Percorrenza p WHERE p.id=:id ", Double.class);
-        query.setParameter("id",idP);
-        return query.getSingleResult();
+        Percorrenza p = em.find(Percorrenza.class, idP);
+        if (p == null) {
+            throw new IllegalArgumentException("Percorrenza non trovata");
+        }
+        if (p.getDataOraPartenza() == null || p.getDataOraArrivo() == null) {
+            throw new IllegalStateException("Partenza o arrivo mancanti");
+        }
+        return (double) Duration.between(p.getDataOraPartenza(), p.getDataOraArrivo()).toMinutes();
     }
 }

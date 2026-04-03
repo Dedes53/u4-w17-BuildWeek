@@ -340,7 +340,7 @@ public class Application {
                                     System.out.println("Fornire id della percorrenza:");
                                     String idPercorrenza = scanner.nextLine();
                                     Double tempo = percorrenzaDAO.CalcolaTempotraPercorrenze(UUID.fromString(idPercorrenza));
-                                    System.out.println("Tempo calcolato: " + tempo);
+                                    System.out.println("Tempo calcolato in minuti: " + tempo);
                                 } catch (Exception e) {
                                     System.out.println("Errore: " + e.getMessage());
                                 }
